@@ -22,29 +22,29 @@ export const getDaysUntilDue = (dueDate: Date | string): number => {
 
 export const getStatusBadgeColor = (status: string): string => {
   const statusColors: Record<string, string> = {
-    pending: 'bg-yellow-100 text-yellow-800',
-    'in-progress': 'bg-blue-100 text-blue-800',
-    submitted: 'bg-green-100 text-green-800',
-    graded: 'bg-purple-100 text-purple-800',
-    'pending-review': 'bg-orange-100 text-orange-800',
-    reviewed: 'bg-green-100 text-green-800',
-    'resubmit-requested': 'bg-red-100 text-red-800',
+    pending: 'bg-warning text-dark',
+    'in-progress': 'bg-primary text-white',
+    submitted: 'bg-success text-white',
+    graded: 'bg-success text-white',
+    'pending-review': 'bg-info text-dark',
+    reviewed: 'bg-success text-white',
+    'resubmit-requested': 'bg-danger text-white',
   }
-  return statusColors[status] || 'bg-gray-100 text-gray-800'
+  return statusColors[status] || 'bg-light text-dark'
 }
 
 export const getGradeColor = (grade: string): string => {
   const gradeColors: Record<string, string> = {
-    'A+': 'text-green-600',
-    A: 'text-green-600',
-    'B+': 'text-blue-600',
-    B: 'text-blue-600',
-    'C+': 'text-yellow-600',
-    C: 'text-yellow-600',
-    D: 'text-orange-600',
-    F: 'text-red-600',
+    'A+': 'bg-success text-white',
+    A: 'bg-success text-white',
+    'B+': 'bg-primary text-white',
+    B: 'bg-primary text-white',
+    'C+': 'bg-warning text-dark',
+    C: 'bg-warning text-dark',
+    D: 'bg-warning text-dark',
+    F: 'bg-danger text-white',
   }
-  return gradeColors[grade] || 'text-gray-600'
+  return gradeColors[grade] || 'bg-light text-dark'
 }
 
 export const calculateGrade = (marks: number, totalMarks: number): string => {

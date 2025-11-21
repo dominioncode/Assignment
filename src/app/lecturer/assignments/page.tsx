@@ -40,127 +40,110 @@ export default function LecturerAssignmentsPage() {
   )
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-8">
+    <div className="container-fluid">
+      <div className="d-flex justify-content-between align-items-center mb-4">
         <div>
-          <h1 className="text-3xl font-bold text-dark mb-2">Manage Assignments</h1>
-          <p className="text-gray-600">Create and manage course assignments</p>
+          <h1 className="h3 mb-1">Manage Assignments</h1>
+          <p className="text-muted mb-0">Create and manage course assignments</p>
         </div>
-        <button
-          onClick={() => setShowCreateModal(true)}
-          className="flex items-center space-x-2 bg-primary text-white px-6 py-2 rounded-lg hover:bg-secondary transition-colors"
-        >
-          <Plus size={20} />
-          <span>Create Assignment</span>
+        <button onClick={() => setShowCreateModal(true)} className="btn btn-primary d-flex align-items-center">
+          <Plus size={18} className="me-2" /> Create Assignment
         </button>
       </div>
 
       {/* Search and Filter */}
-      <div className="bg-white rounded-lg p-6 mb-6 border border-gray-200">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="md:col-span-2">
-            <div className="relative">
-              <Search className="absolute left-3 top-3 text-gray-400" size={20} />
-              <input
-                type="text"
-                placeholder="Search assignments..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-              />
+      <div className="card mb-4">
+        <div className="card-body">
+          <div className="row g-3">
+            <div className="col-md-8">
+              <div className="input-group">
+                <span className="input-group-text bg-white"><Search size={18} /></span>
+                <input type="text" placeholder="Search assignments..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="form-control" />
+              </div>
+            </div>
+            <div className="col-md-4">
+              <select value={filterType} onChange={(e) => setFilterType(e.target.value as any)} className="form-select">
+                <option value="all">All Types</option>
+                <option value="individual">Individual</option>
+                <option value="group">Group</option>
+                <option value="study">Study</option>
+              </select>
             </div>
           </div>
-          <select
-            value={filterType}
-            onChange={(e) => setFilterType(e.target.value as any)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-          >
-            <option value="all">All Types</option>
-            <option value="individual">Individual</option>
-            <option value="group">Group</option>
-            <option value="study">Study</option>
-          </select>
         </div>
       </div>
 
       {/* Assignments Table */}
-      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-gray-50 border-b border-gray-200">
-            <tr>
-              <th className="text-left px-6 py-3 font-semibold text-sm text-gray-700">Title</th>
-              <th className="text-left px-6 py-3 font-semibold text-sm text-gray-700">Course</th>
-              <th className="text-left px-6 py-3 font-semibold text-sm text-gray-700">Type</th>
-              <th className="text-center px-6 py-3 font-semibold text-sm text-gray-700">Marks</th>
-              <th className="text-center px-6 py-3 font-semibold text-sm text-gray-700">Submissions</th>
-              <th className="text-center px-6 py-3 font-semibold text-sm text-gray-700">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredAssignments.map((assignment, index) => (
-              <tr key={assignment.id} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                <td className="px-6 py-4">
-                  <div>
-                    <p className="font-semibold text-dark">{assignment.title}</p>
-                    <p className="text-sm text-gray-600">Due: {assignment.dueDate.toLocaleDateString()}</p>
-                  </div>
-                </td>
-                <td className="px-6 py-4 text-sm">
-                  <p className="font-semibold">{assignment.courseCode}</p>
-                  <p className="text-gray-600">{assignment.courseName}</p>
-                </td>
-                <td className="px-6 py-4 text-sm">
-                  <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full capitalize">
-                    {assignment.type}
-                  </span>
-                </td>
-                <td className="px-6 py-4 text-sm text-center text-dark font-semibold">
-                  {assignment.totalMarks}
-                </td>
-                <td className="px-6 py-4 text-sm text-center">
-                  <div>
-                    <p className="font-semibold text-dark">{assignment.submissions}</p>
-                    <p className="text-gray-600">{assignment.graded} graded</p>
-                  </div>
-                </td>
-                <td className="px-6 py-4 text-center">
-                  <div className="flex items-center justify-center space-x-2">
-                    <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="View">
-                      <Eye size={18} className="text-blue-600" />
-                    </button>
-                    <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Edit">
-                      <Edit size={18} className="text-green-600" />
-                    </button>
-                    <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="Delete">
-                      <Trash2 size={18} className="text-red-600" />
-                    </button>
-                  </div>
-                </td>
+      <div className="card mb-4">
+        <div className="table-responsive">
+          <table className="table table-hover mb-0 align-middle">
+            <thead className="table-light">
+              <tr>
+                <th>Title</th>
+                <th>Course</th>
+                <th>Type</th>
+                <th className="text-center">Marks</th>
+                <th className="text-center">Submissions</th>
+                <th className="text-center">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filteredAssignments.map((assignment) => (
+                <tr key={assignment.id}>
+                  <td>
+                    <div>
+                      <div className="fw-semibold">{assignment.title}</div>
+                      <div className="small text-muted">Due: {assignment.dueDate.toLocaleDateString()}</div>
+                    </div>
+                  </td>
+                  <td>
+                    <div className="fw-semibold">{assignment.courseCode}</div>
+                    <div className="small text-muted">{assignment.courseName}</div>
+                  </td>
+                  <td>
+                    <span className="badge bg-primary text-capitalize">{assignment.type}</span>
+                  </td>
+                  <td className="text-center fw-semibold">{assignment.totalMarks}</td>
+                  <td className="text-center">
+                    <div className="fw-semibold">{assignment.submissions}</div>
+                    <div className="small text-muted">{assignment.graded} graded</div>
+                  </td>
+                  <td className="text-center">
+                    <div className="btn-group" role="group">
+                      <button className="btn btn-sm btn-outline-primary" title="View"><Eye /></button>
+                      <button className="btn btn-sm btn-outline-success" title="Edit"><Edit /></button>
+                      <button className="btn btn-sm btn-outline-danger" title="Delete"><Trash2 /></button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-        <div className="bg-white border border-gray-200 rounded-lg p-6">
-          <p className="text-gray-600 text-sm font-semibold">Total Assignments</p>
-          <p className="text-3xl font-bold text-dark mt-2">{filteredAssignments.length}</p>
+      <div className="row g-3">
+        <div className="col-md-4">
+          <div className="card p-3">
+            <div className="small text-muted">Total Assignments</div>
+            <div className="h4 mt-2">{filteredAssignments.length}</div>
+          </div>
         </div>
-        <div className="bg-white border border-gray-200 rounded-lg p-6">
-          <p className="text-gray-600 text-sm font-semibold">Total Submissions</p>
-          <p className="text-3xl font-bold text-dark mt-2">
-            {filteredAssignments.reduce((sum, a) => sum + a.submissions, 0)}
-          </p>
+        <div className="col-md-4">
+          <div className="card p-3">
+            <div className="small text-muted">Total Submissions</div>
+            <div className="h4 mt-2">{filteredAssignments.reduce((sum, a) => sum + a.submissions, 0)}</div>
+          </div>
         </div>
-        <div className="bg-white border border-gray-200 rounded-lg p-6">
-          <p className="text-gray-600 text-sm font-semibold">Pending Review</p>
-          <p className="text-3xl font-bold text-orange-600 mt-2">
-            {filteredAssignments.reduce((sum, a) => sum + (a.submissions - a.graded), 0)}
-          </p>
+        <div className="col-md-4">
+          <div className="card p-3">
+            <div className="small text-muted">Pending Review</div>
+            <div className="h4 mt-2 text-danger">{filteredAssignments.reduce((sum, a) => sum + (a.submissions - a.graded), 0)}</div>
+          </div>
         </div>
       </div>
     </div>
   )
 }
+

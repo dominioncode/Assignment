@@ -29,78 +29,65 @@ export default function LecturerMaterialsPage() {
   ]
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-8">
+    <div className="container-fluid">
+      <div className="d-flex justify-content-between align-items-center mb-4">
         <div>
-          <h1 className="text-3xl font-bold text-dark mb-2">Study Materials</h1>
-          <p className="text-gray-600">Upload and manage course materials</p>
+          <h1 className="h3 mb-1">Study Materials</h1>
+          <p className="text-muted mb-0">Upload and manage course materials</p>
         </div>
-        <button className="flex items-center space-x-2 bg-primary text-white px-6 py-2 rounded-lg hover:bg-secondary transition-colors">
-          <Upload size={20} />
-          <span>Upload Material</span>
-        </button>
+        <button className="btn btn-primary d-flex align-items-center"><Upload size={18} className="me-2" /> Upload Material</button>
       </div>
 
       {/* Search and Filter */}
-      <div className="bg-white rounded-lg p-6 mb-6 border border-gray-200">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="md:col-span-2">
-            <div className="relative">
-              <Search className="absolute left-3 top-3 text-gray-400" size={20} />
-              <input
-                type="text"
-                placeholder="Search materials..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-              />
+      <div className="card mb-4">
+        <div className="card-body">
+          <div className="row g-3">
+            <div className="col-md-8">
+              <div className="input-group">
+                <span className="input-group-text bg-white"><Search size={18} /></span>
+                <input type="text" placeholder="Search materials..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="form-control" />
+              </div>
+            </div>
+            <div className="col-md-4">
+              <select value={filterCourse} onChange={(e) => setFilterCourse(e.target.value)} className="form-select">
+                <option value="all">All Courses</option>
+                <option value="CS101">CS101 - Database Systems</option>
+                <option value="CS102">CS102 - Web Development</option>
+              </select>
             </div>
           </div>
-          <select
-            value={filterCourse}
-            onChange={(e) => setFilterCourse(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-          >
-            <option value="all">All Courses</option>
-            <option value="CS101">CS101 - Database Systems</option>
-            <option value="CS102">CS102 - Web Development</option>
-          </select>
         </div>
       </div>
 
       {/* Materials Table */}
-      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-gray-50 border-b border-gray-200">
-            <tr>
-              <th className="text-left px-6 py-3 font-semibold text-sm text-gray-700">Title</th>
-              <th className="text-left px-6 py-3 font-semibold text-sm text-gray-700">Course</th>
-              <th className="text-left px-6 py-3 font-semibold text-sm text-gray-700">Type</th>
-              <th className="text-center px-6 py-3 font-semibold text-sm text-gray-700">Views</th>
-              <th className="text-left px-6 py-3 font-semibold text-sm text-gray-700">Uploaded</th>
-            </tr>
-          </thead>
-          <tbody>
-            {materials.map((material, index) => (
-              <tr key={material.id} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                <td className="px-6 py-4 font-semibold text-dark">{material.title}</td>
-                <td className="px-6 py-4 text-sm">
-                  <p className="font-semibold">{material.course}</p>
-                  <p className="text-gray-600">{material.courseCode}</p>
-                </td>
-                <td className="px-6 py-4 text-sm">
-                  <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full capitalize">
-                    {material.type}
-                  </span>
-                </td>
-                <td className="px-6 py-4 text-sm text-center text-dark font-semibold">
-                  {material.views}
-                </td>
-                <td className="px-6 py-4 text-sm text-gray-600">{material.uploadDate}</td>
+      <div className="card">
+        <div className="table-responsive">
+          <table className="table table-hover mb-0 align-middle">
+            <thead className="table-light">
+              <tr>
+                <th>Title</th>
+                <th>Course</th>
+                <th>Type</th>
+                <th className="text-center">Views</th>
+                <th>Uploaded</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {materials.map((material) => (
+                <tr key={material.id}>
+                  <td className="fw-semibold">{material.title}</td>
+                  <td>
+                    <div className="fw-semibold">{material.course}</div>
+                    <div className="small text-muted">{material.courseCode}</div>
+                  </td>
+                  <td><span className="badge bg-secondary text-capitalize">{material.type}</span></td>
+                  <td className="text-center fw-semibold">{material.views}</td>
+                  <td className="small text-muted">{material.uploadDate}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   )

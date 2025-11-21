@@ -78,101 +78,75 @@ export default function Home() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-dark via-dark to-secondary">
-      {/* Header */}
-      <header className="bg-black/30 backdrop-blur-md border-b border-white/10 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <BookOpen className="text-primary" size={32} />
-            <span className="text-2xl font-bold text-white">StudyHub</span>
-          </div>
-          <div className="flex items-center space-x-4">
-            <button className="text-white hover:text-primary transition-colors">Documentation</button>
-            <button className="text-white hover:text-primary transition-colors">Support</button>
-          </div>
+    <div className="container-fluid py-5">
+      <header className="d-flex justify-content-between align-items-center mb-4">
+        <div className="d-flex align-items-center gap-3">
+          <BookOpen size={28} />
+          <span className="h5 mb-0">StudyHub</span>
+        </div>
+        <div>
+          <button className="btn btn-link me-2">Documentation</button>
+          <button className="btn btn-link">Support</button>
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="max-w-7xl mx-auto px-6 py-20 text-center">
-        <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
-          Your Complete Study Management Platform
-        </h1>
-        <p className="text-xl text-gray-300 mb-12 max-w-2xl mx-auto">
-          Manage assignments, coordinate group work, track results, and streamline academic collaboration
-          between students and lecturers
-        </p>
+      {/* Hero */}
+      <section className="text-center py-5 mb-4">
+        <h1 className="display-6 fw-bold">Your Complete Study Management Platform</h1>
+        <p className="lead text-muted">Manage assignments, coordinate group work, track results, and streamline academic collaboration between students and lecturers</p>
+      </section>
 
-        {/* Role Selection */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+      {/* Role Selection */}
+      <section className="mb-5">
+        <div className="row g-3">
           {roles.map((item) => (
-            <div
-              key={item.role}
-              onClick={() => setSelectedRole(item.role)}
-              className={`p-8 rounded-lg border-2 cursor-pointer transition-all ${
-                selectedRole === item.role
-                  ? 'bg-primary/20 border-primary'
-                  : 'bg-white/10 border-white/20 hover:border-primary/50 hover:bg-white/15'
-              }`}
-            >
-              <h3 className="text-2xl font-bold text-white mb-2">{item.title}</h3>
-              <p className="text-gray-300 mb-4">{item.description}</p>
-              <ul className="space-y-2 text-left mb-6">
-                {item.features.map((feature, index) => (
-                  <li key={index} className="flex items-start space-x-2 text-gray-300">
-                    <CheckCircle size={18} className="text-success mt-1 flex-shrink-0" />
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-              <Link
-                href={selectedRole === item.role ? `/auth/login?role=${item.role}` : '#'}
-                className={`inline-flex items-center space-x-2 px-6 py-2 rounded-lg font-semibold transition-colors ${
-                  selectedRole === item.role
-                    ? 'bg-primary text-white hover:bg-primary/90'
-                    : 'bg-white/20 text-white hover:bg-white/30'
-                }`}
-              >
-                <span>Get Started</span>
-                <ArrowRight size={18} />
-              </Link>
+            <div key={item.role} className="col-12 col-md-6">
+              <div className={`card ${selectedRole === item.role ? 'border-primary' : ''}`} onClick={() => setSelectedRole(item.role)} style={{ cursor: 'pointer' }}>
+                <div className="card-body">
+                  <h5 className="card-title">{item.title}</h5>
+                  <p className="text-muted">{item.description}</p>
+                  <ul className="mb-3">
+                    {item.features.map((feature, index) => (
+                      <li key={index} className="text-muted small">{feature}</li>
+                    ))}
+                  </ul>
+                  <Link href={selectedRole === item.role ? `/auth/login?role=${item.role}` : '#'} className={`btn ${selectedRole === item.role ? 'btn-primary' : 'btn-outline-light'}`}>
+                    Get Started <ArrowRight size={16} className="ms-2" />
+                  </Link>
+                </div>
+              </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="bg-white/5 backdrop-blur-md py-20">
-        <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-4xl font-bold text-white text-center mb-12">Why Choose StudyHub?</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {features.map((feature, index) => (
-              <div key={index} className="bg-white/10 backdrop-blur-md p-6 rounded-lg border border-white/20">
-                <feature.icon className="text-primary mb-4" size={32} />
-                <h3 className="text-xl font-bold text-white mb-2">{feature.title}</h3>
-                <p className="text-gray-300">{feature.description}</p>
+      {/* Features */}
+      <section className="mb-5">
+        <h2 className="h4 mb-3 text-center">Why Choose StudyHub?</h2>
+        <div className="row g-3">
+          {features.map((feature, index) => (
+            <div key={index} className="col-12 col-md-6 col-lg-4">
+              <div className="card h-100">
+                <div className="card-body">
+                  <feature.icon size={28} className="mb-3" />
+                  <h5 className="card-title">{feature.title}</h5>
+                  <p className="text-muted">{feature.description}</p>
+                </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="max-w-7xl mx-auto px-6 py-20 text-center">
-        <h2 className="text-3xl font-bold text-white mb-6">Ready to Get Started?</h2>
-        <p className="text-xl text-gray-300 mb-8">
-          Choose your role above and start managing your academic journey today
-        </p>
-        {!selectedRole && (
-          <p className="text-gray-400 text-sm">Select your role above to continue</p>
-        )}
+      {/* CTA */}
+      <section className="text-center mb-5">
+        <h3>Ready to Get Started?</h3>
+        <p className="text-muted">Choose your role above and start managing your academic journey today</p>
+        {!selectedRole && <p className="text-muted small">Select your role above to continue</p>}
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-white/10 bg-black/20 py-8">
-        <div className="max-w-7xl mx-auto px-6 text-center text-gray-400">
-          <p>&copy; 2025 StudyHub. All rights reserved.</p>
-        </div>
+      <footer className="text-center text-muted py-4">
+        <small>&copy; 2025 StudyHub. All rights reserved.</small>
       </footer>
     </div>
   )

@@ -8,7 +8,12 @@ import type {
   SemesterResult,
   StudyMaterial,
   Notification,
+  Question,
+  QuestionSet,
+  StudentAnswer,
+  QuestionResponse,
 } from './types'
+import { seedCourses, seedAssignments, seedMaterials, seedQuestions, seedQuestionSets } from './seedData'
 
 interface AppStore {
   // Auth state
@@ -52,6 +57,34 @@ interface AppStore {
   notifications: Notification[]
   addNotification: (notification: Notification) => void
   markNotificationAsRead: (notificationId: string) => void
+
+  // Questions
+  questions: Question[]
+  addQuestion: (question: Question) => void
+  updateQuestion: (id: string, question: Partial<Question>) => void
+  deleteQuestion: (id: string) => void
+  getQuestionsByCourse: (courseId: string) => Question[]
+
+  // Question Sets
+  questionSets: QuestionSet[]
+  addQuestionSet: (questionSet: QuestionSet) => void
+  updateQuestionSet: (id: string, questionSet: Partial<QuestionSet>) => void
+  deleteQuestionSet: (id: string) => void
+  getQuestionSetsByCourse: (courseId: string) => QuestionSet[]
+
+  // Student Answers
+  studentAnswers: StudentAnswer[]
+  submitAnswer: (answer: StudentAnswer) => void
+  updateAnswer: (id: string, answer: Partial<StudentAnswer>) => void
+  getAnswersByStudent: (studentId: string) => StudentAnswer[]
+  getAnswersByQuestion: (questionId: string) => StudentAnswer[]
+
+  // Question Responses
+  questionResponses: QuestionResponse[]
+  createResponse: (response: QuestionResponse) => void
+  updateResponse: (id: string, response: Partial<QuestionResponse>) => void
+  getResponsesByStudent: (studentId: string) => QuestionResponse[]
+  getResponsesByQuestionSet: (questionSetId: string) => QuestionResponse[]
 }
 
 export const useAppStore = create<AppStore>((set, get) => ({
@@ -59,8 +92,8 @@ export const useAppStore = create<AppStore>((set, get) => ({
   currentUser: null,
   setCurrentUser: (user) => set({ currentUser: user }),
 
-  // Assignments
-  assignments: [],
+  // Assignments - initialized with seed data
+  assignments: seedAssignments,
   addAssignment: (assignment) =>
     set((state) => ({
       assignments: [...state.assignments, assignment],
@@ -116,8 +149,8 @@ export const useAppStore = create<AppStore>((set, get) => ({
       ),
     })),
 
-  // Courses
-  courses: [],
+  // Courses - initialized with seed data
+  courses: seedCourses,
   addCourse: (course) =>
     set((state) => ({
       courses: [...state.courses, course],
@@ -142,8 +175,8 @@ export const useAppStore = create<AppStore>((set, get) => ({
     return state.results.filter((r) => r.semester === semester && r.year === year)
   },
 
-  // Materials
-  materials: [],
+  // Materials - initialized with seed data
+  materials: seedMaterials,
   addMaterial: (material) =>
     set((state) => ({
       materials: [...state.materials, material],
@@ -165,4 +198,88 @@ export const useAppStore = create<AppStore>((set, get) => ({
         n.id === notificationId ? { ...n, isRead: true } : n
       ),
     })),
+
+  // Questions
+  questions: seedQuestions,
+  addQuestion: (question) =>
+    set((state) => ({
+      questions: [...state.questions, question],
+    })),
+  updateQuestion: (id, updates) =>
+    set((state) => ({
+      questions: state.questions.map((q) =>
+        q.id === id ? { ...q, ...updates } : q
+      ),
+    })),
+  deleteQuestion: (id) =>
+    set((state) => ({
+      questions: state.questions.filter((q) => q.id !== id),
+    })),
+  getQuestionsByCourse: (courseId) => {
+    const state = get()
+    return state.questions.filter((q) => q.courseId === courseId)
+  },
+
+  // Question Sets
+  questionSets: seedQuestionSets,
+  addQuestionSet: (questionSet) =>
+    set((state) => ({
+      questionSets: [...state.questionSets, questionSet],
+    })),
+  updateQuestionSet: (id, updates) =>
+    set((state) => ({
+      questionSets: state.questionSets.map((qs) =>
+        qs.id === id ? { ...qs, ...updates } : qs
+      ),
+    })),
+  deleteQuestionSet: (id) =>
+    set((state) => ({
+      questionSets: state.questionSets.filter((qs) => qs.id !== id),
+    })),
+  getQuestionSetsByCourse: (courseId) => {
+    const state = get()
+    return state.questionSets.filter((qs) => qs.courseId === courseId)
+  },
+
+  // Student Answers
+  studentAnswers: [],
+  submitAnswer: (answer) =>
+    set((state) => ({
+      studentAnswers: [...state.studentAnswers, answer],
+    })),
+  updateAnswer: (id, updates) =>
+    set((state) => ({
+      studentAnswers: state.studentAnswers.map((sa) =>
+        sa.id === id ? { ...sa, ...updates } : sa
+      ),
+    })),
+  getAnswersByStudent: (studentId) => {
+    const state = get()
+    return state.studentAnswers.filter((sa) => sa.studentId === studentId)
+  },
+  getAnswersByQuestion: (questionId) => {
+    const state = get()
+    return state.studentAnswers.filter((sa) => sa.questionId === questionId)
+  },
+
+  // Question Responses
+  questionResponses: [],
+  createResponse: (response) =>
+    set((state) => ({
+      questionResponses: [...state.questionResponses, response],
+    })),
+  updateResponse: (id, updates) =>
+    set((state) => ({
+      questionResponses: state.questionResponses.map((qr) =>
+        qr.id === id ? { ...qr, ...updates } : qr
+      ),
+    })),
+  getResponsesByStudent: (studentId) => {
+    const state = get()
+    return state.questionResponses.filter((qr) => qr.studentId === studentId)
+  },
+  getResponsesByQuestionSet: (questionSetId) => {
+    const state = get()
+    return state.questionResponses.filter((qr) => qr.questionSetId === questionSetId)
+  },
 }))

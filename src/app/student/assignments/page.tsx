@@ -55,65 +55,53 @@ export default function StudentAssignmentsPage() {
   })
 
   return (
-    <div>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-dark mb-2">My Assignments</h1>
-        <p className="text-gray-600">Track and manage all your course assignments</p>
+    <div className="container-fluid">
+      <div className="mb-3">
+        <h1 className="h3 mb-1">My Assignments</h1>
+        <p className="text-muted mb-0">Track and manage all your course assignments</p>
       </div>
 
       {/* Search and Filter Bar */}
-      <div className="bg-white rounded-lg p-6 mb-6 border border-gray-200">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="md:col-span-2">
-            <div className="relative">
-              <Search className="absolute left-3 top-3 text-gray-400" size={20} />
-              <input
-                type="text"
-                placeholder="Search assignments..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-              />
+      <div className="card mb-4">
+        <div className="card-body">
+          <div className="row g-3">
+            <div className="col-md-6">
+              <div className="input-group">
+                <span className="input-group-text bg-white"><Search size={18} /></span>
+                <input type="text" placeholder="Search assignments..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="form-control" />
+              </div>
             </div>
-          </div>
-
-          <div>
-            <select
-              value={filterType}
-              onChange={(e) => setFilterType(e.target.value as any)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-            >
-              <option value="all">All Types</option>
-              <option value="individual">Individual</option>
-              <option value="group">Group</option>
-              <option value="study">Study</option>
-            </select>
-          </div>
-
-          <div>
-            <select
-              value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value as any)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-            >
-              <option value="all">All Status</option>
-              <option value="pending">Pending</option>
-              <option value="submitted">Submitted</option>
-              <option value="graded">Graded</option>
-            </select>
+            <div className="col-md-3">
+              <select value={filterType} onChange={(e) => setFilterType(e.target.value as any)} className="form-select">
+                <option value="all">All Types</option>
+                <option value="individual">Individual</option>
+                <option value="group">Group</option>
+                <option value="study">Study</option>
+              </select>
+            </div>
+            <div className="col-md-3">
+              <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value as any)} className="form-select">
+                <option value="all">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="submitted">Submitted</option>
+                <option value="graded">Graded</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Assignment Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="row g-3">
         {filteredAssignments.length > 0 ? (
           filteredAssignments.map((assignment) => (
-            <AssignmentCard key={assignment.id} assignment={assignment} />
+            <div key={assignment.id} className="col-12 col-md-6 col-lg-4">
+              <AssignmentCard assignment={assignment} />
+            </div>
           ))
         ) : (
-          <div className="col-span-full text-center py-12">
-            <p className="text-gray-600 text-lg">No assignments found matching your criteria</p>
+          <div className="col-12 text-center py-5">
+            <p className="text-muted lead">No assignments found matching your criteria</p>
           </div>
         )}
       </div>

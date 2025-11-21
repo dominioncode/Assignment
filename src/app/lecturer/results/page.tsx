@@ -31,101 +31,91 @@ export default function LecturerResultsPage() {
   ]
 
   return (
-    <div>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-dark mb-2">Student Results</h1>
-        <p className="text-gray-600">Review and publish semester results</p>
+    <div className="container-fluid">
+      <div className="mb-3">
+        <h1 className="h3 mb-1">Student Results</h1>
+        <p className="text-muted mb-0">Review and publish semester results</p>
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-lg p-6 mb-6 border border-gray-200">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div>
-            <label className="block text-sm font-semibold text-dark mb-2">Semester</label>
-            <select
-              value={selectedSemester}
-              onChange={(e) => setSelectedSemester(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-            >
-              <option value="first">First Semester</option>
-              <option value="second">Second Semester</option>
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-semibold text-dark mb-2">Course</label>
-            <select
-              value={selectedCourse}
-              onChange={(e) => setSelectedCourse(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-            >
-              <option value="all">All Courses</option>
-              <option value="CS101">CS101 - Database Systems</option>
-              <option value="CS102">CS102 - Web Development</option>
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-semibold text-dark mb-2">&nbsp;</label>
-            <button className="w-full bg-primary text-white px-4 py-2 rounded-lg hover:bg-secondary transition-colors">
-              Publish Results
-            </button>
+      <div className="card mb-4">
+        <div className="card-body">
+          <div className="row g-3">
+            <div className="col-md-4">
+              <label className="form-label small">Semester</label>
+              <select value={selectedSemester} onChange={(e) => setSelectedSemester(e.target.value)} className="form-select">
+                <option value="first">First Semester</option>
+                <option value="second">Second Semester</option>
+              </select>
+            </div>
+            <div className="col-md-4">
+              <label className="form-label small">Course</label>
+              <select value={selectedCourse} onChange={(e) => setSelectedCourse(e.target.value)} className="form-select">
+                <option value="all">All Courses</option>
+                <option value="CS101">CS101 - Database Systems</option>
+                <option value="CS102">CS102 - Web Development</option>
+              </select>
+            </div>
+            <div className="col-md-4 d-flex align-items-end">
+              <button className="btn btn-primary w-100">Publish Results</button>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Results Table */}
-      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-gray-50 border-b border-gray-200">
-            <tr>
-              <th className="text-left px-6 py-3 font-semibold text-sm text-gray-700">Student</th>
-              <th className="text-left px-6 py-3 font-semibold text-sm text-gray-700">ID</th>
-              <th className="text-left px-6 py-3 font-semibold text-sm text-gray-700">Course</th>
-              <th className="text-center px-6 py-3 font-semibold text-sm text-gray-700">Marks</th>
-              <th className="text-center px-6 py-3 font-semibold text-sm text-gray-700">Grade</th>
-            </tr>
-          </thead>
-          <tbody>
-            {results.map((result, index) => (
-              <tr key={result.id} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                <td className="px-6 py-4 font-semibold text-dark">{result.studentName}</td>
-                <td className="px-6 py-4 text-sm text-gray-600">{result.studentId}</td>
-                <td className="px-6 py-4 text-sm">
-                  <p className="font-semibold">{result.course}</p>
-                  <p className="text-gray-600">{result.courseName}</p>
-                </td>
-                <td className="px-6 py-4 text-sm text-center">
-                  <span className="font-semibold text-dark">{result.marks}</span>
-                  <span className="text-gray-500"> / {result.totalMarks}</span>
-                </td>
-                <td className="px-6 py-4 text-sm text-center">
-                  <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full font-bold">
-                    {result.grade}
-                  </span>
-                </td>
+      <div className="card mb-4">
+        <div className="table-responsive">
+          <table className="table table-hover mb-0 align-middle">
+            <thead className="table-light">
+              <tr>
+                <th>Student</th>
+                <th>ID</th>
+                <th>Course</th>
+                <th className="text-center">Marks</th>
+                <th className="text-center">Grade</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {results.map((result) => (
+                <tr key={result.id}>
+                  <td className="fw-semibold">{result.studentName}</td>
+                  <td className="small text-muted">{result.studentId}</td>
+                  <td>
+                    <div className="fw-semibold">{result.course}</div>
+                    <div className="small text-muted">{result.courseName}</div>
+                  </td>
+                  <td className="text-center"><span className="fw-semibold">{result.marks}</span><span className="text-muted"> / {result.totalMarks}</span></td>
+                  <td className="text-center"><span className="badge bg-success fw-bold">{result.grade}</span></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Statistics */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-        <div className="bg-white border border-gray-200 rounded-lg p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-600 text-sm font-semibold">Average Marks</p>
-              <p className="text-3xl font-bold text-dark mt-2">88.5</p>
+      <div className="row g-3">
+        <div className="col-md-6">
+          <div className="card p-3">
+            <div className="d-flex justify-content-between align-items-center">
+              <div>
+                <div className="small text-muted">Average Marks</div>
+                <div className="h4 mt-1">88.5</div>
+              </div>
+              <BarChart3 size={32} className="text-primary opacity-50" />
             </div>
-            <BarChart3 size={32} className="text-primary opacity-50" />
           </div>
         </div>
-        <div className="bg-white border border-gray-200 rounded-lg p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-gray-600 text-sm font-semibold">Students Evaluated</p>
-              <p className="text-3xl font-bold text-dark mt-2">{results.length}</p>
+        <div className="col-md-6">
+          <div className="card p-3">
+            <div className="d-flex justify-content-between align-items-center">
+              <div>
+                <div className="small text-muted">Students Evaluated</div>
+                <div className="h4 mt-1">{results.length}</div>
+              </div>
+              <TrendingUp size={32} className="text-success opacity-50" />
             </div>
-            <TrendingUp size={32} className="text-success opacity-50" />
           </div>
         </div>
       </div>

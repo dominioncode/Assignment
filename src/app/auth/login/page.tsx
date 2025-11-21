@@ -3,182 +3,178 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { BookOpen, Mail, Lock, LogIn, AlertCircle } from 'lucide-react'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
+import useAuth from '@/lib/useAuth'
 
 export default function LoginPage() {
   const searchParams = useSearchParams()
+  const router = useRouter()
   const role = searchParams.get('role') || 'student'
+
+  const { login } = useAuth()
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
     setIsLoading(true)
 
-    // Simulate login process
-    setTimeout(() => {
-      if (!email || !password) {
-        setError('Please fill in all fields')
+    if (!email || !password) {
+      setError('Please fill in all fields')
+      setIsLoading(false)
+      return
+    }
+
+    try {
+      const result = await login(email, password)
+      if (!result.ok) {
+        setError(result.error || 'Login failed')
         setIsLoading(false)
         return
       }
 
-      // For demo purposes, accept any email/password
-      if (role === 'student') {
-        window.location.href = '/student/assignments'
-      } else {
-        window.location.href = '/lecturer/assignments'
-      }
+      // Redirect based on role
+      if (role === 'student') router.push('/student/assignments')
+      else router.push('/lecturer/assignments')
+    } catch (err) {
+      console.error(err)
+      setError('Login failed')
+    } finally {
       setIsLoading(false)
-    }, 1000)
+    }
   }
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-vh-100 d-flex">
       {/* Left Side - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-dark to-secondary items-center justify-center p-12">
-        <div className="text-white text-center">
-          <div className="flex items-center justify-center space-x-3 mb-6">
-            <BookOpen size={48} />
-            <h1 className="text-5xl font-bold">StudyHub</h1>
+      <div className="d-none d-lg-flex col-lg-6 brand-gradient align-items-center justify-content-center p-5">
+        <div className="text-center">
+          <div className="d-flex align-items-center justify-content-center gap-3 mb-4">
+            <BookOpen size={48} className="text-white" />
+            <h1 className="fs-1 fw-bold">StudyHub</h1>
           </div>
-          <p className="text-xl text-gray-300 mb-4">Assignment & Study Management Platform</p>
-          <p className="text-gray-400">
-            Streamline academic collaboration between students and lecturers
-          </p>
+          <p className="fs-5 text-white-50 mb-3">Assignment & Study Management Platform</p>
+          <p className="text-white-50">Streamline academic collaboration between students and lecturers</p>
 
           {/* Features List */}
-          <div className="mt-12 space-y-4 text-left max-w-md">
-            <div className="flex items-start space-x-3">
-              <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
-              <p>Manage assignments and deadlines efficiently</p>
+          <div className="mt-4 d-grid gap-2 text-start" style={{ maxWidth: 420 }}>
+            <div className="d-flex align-items-start gap-2">
+              <div className="rounded-circle bg-white" style={{ width: 8, height: 8, marginTop: 6 }}></div>
+              <p className="mb-0 text-white-90">Manage assignments and deadlines efficiently</p>
             </div>
-            <div className="flex items-start space-x-3">
-              <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
-              <p>Coordinate group projects seamlessly</p>
+            <div className="d-flex align-items-start gap-2">
+              <div className="rounded-circle bg-white" style={{ width: 8, height: 8, marginTop: 6 }}></div>
+              <p className="mb-0 text-white-90">Coordinate group projects seamlessly</p>
             </div>
-            <div className="flex items-start space-x-3">
-              <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
-              <p>Track your academic progress and grades</p>
+            <div className="d-flex align-items-start gap-2">
+              <div className="rounded-circle bg-white" style={{ width: 8, height: 8, marginTop: 6 }}></div>
+              <p className="mb-0 text-white-90">Track your academic progress and grades</p>
             </div>
-            <div className="flex items-start space-x-3">
-              <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
-              <p>Share and access study materials</p>
+            <div className="d-flex align-items-start gap-2">
+              <div className="rounded-circle bg-white" style={{ width: 8, height: 8, marginTop: 6 }}></div>
+              <p className="mb-0 text-white-90">Share and access study materials</p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Right Side - Login Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-6 bg-light">
-        <div className="w-full max-w-md">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-dark mb-2">Welcome Back</h2>
-            <p className="text-gray-600">Sign in as {role === 'student' ? 'Student' : 'Lecturer'}</p>
+      <div className="col-12 col-lg-6 d-flex align-items-center justify-content-center p-4 bg-light">
+        <div className="w-100" style={{ maxWidth: 420 }}>
+          <div className="text-center mb-4">
+            <h2 className="h4 fw-bold text-dark mb-1">Welcome Back</h2>
+            <p className="text-muted">Sign in as {role === 'student' ? 'Student' : 'Lecturer'}</p>
           </div>
 
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start space-x-3">
-              <AlertCircle size={20} className="text-red-600 mt-0.5 flex-shrink-0" />
-              <span className="text-red-700 text-sm">{error}</span>
+            <div className="alert alert-danger d-flex align-items-start">
+              <AlertCircle size={20} className="flex-shrink-0 me-2" />
+              <div className="small mb-0">{error}</div>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit}>
             {/* Email Input */}
-            <div>
-              <label className="block text-sm font-semibold text-dark mb-2">Email Address</label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-3 text-gray-400" size={20} />
+            <div className="mb-3">
+              <label className="form-label small fw-semibold">Email Address</label>
+              <div className="input-group">
+                <span className="input-group-text"><Mail size={18} /></span>
                 <input
                   type="email"
                   placeholder="you@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="form-control"
                   disabled={isLoading}
                 />
               </div>
             </div>
 
             {/* Password Input */}
-            <div>
-              <label className="block text-sm font-semibold text-dark mb-2">Password</label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-3 text-gray-400" size={20} />
+            <div className="mb-3">
+              <label className="form-label small fw-semibold">Password</label>
+              <div className="input-group">
+                <span className="input-group-text"><Lock size={18} /></span>
                 <input
                   type="password"
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="form-control"
                   disabled={isLoading}
                 />
               </div>
             </div>
 
             {/* Remember Me & Forgot Password */}
-            <div className="flex items-center justify-between text-sm">
-              <label className="flex items-center space-x-2 text-gray-700">
-                <input type="checkbox" className="rounded" disabled={isLoading} />
-                <span>Remember me</span>
-              </label>
-              <button
-                type="button"
-                className="text-primary hover:text-secondary transition-colors disabled:opacity-50"
-                disabled={isLoading}
-              >
-                Forgot password?
-              </button>
+            <div className="d-flex align-items-center justify-content-between small mb-3">
+              <div className="form-check">
+                <input className="form-check-input" type="checkbox" id="remember" disabled={isLoading} />
+                <label className="form-check-label" htmlFor="remember">Remember me</label>
+              </div>
+              <button type="button" className="btn btn-link p-0" disabled={isLoading}>Forgot password?</button>
             </div>
 
             {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full bg-primary text-white font-semibold py-2 rounded-lg hover:bg-secondary transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
-            >
-              <LogIn size={20} />
-              <span>{isLoading ? 'Signing in...' : 'Sign In'}</span>
+            <button type="submit" disabled={isLoading} className="btn btn-primary w-100 mb-3">
+              <span className="d-inline-flex align-items-center">
+                <LogIn size={18} className="me-2" />
+                <span>{isLoading ? 'Signing in...' : 'Sign In'}</span>
+              </span>
             </button>
           </form>
 
           {/* Divider */}
-          <div className="my-6 flex items-center">
-            <div className="flex-1 border-t border-gray-300"></div>
-            <span className="px-3 text-gray-500 text-sm">Demo Credentials</span>
-            <div className="flex-1 border-t border-gray-300"></div>
+          <div className="d-flex align-items-center my-4">
+            <hr className="flex-grow-1" />
+            <span className="px-3 text-muted small">Demo Credentials</span>
+            <hr className="flex-grow-1" />
           </div>
 
           {/* Demo Info */}
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-            <p className="text-sm text-blue-900 font-semibold mb-2">Try demo login:</p>
-            <ul className="text-sm text-blue-800 space-y-1">
-              <li>Email: <code className="font-mono bg-white px-2 py-1 rounded">demo@example.com</code></li>
-              <li>Password: <code className="font-mono bg-white px-2 py-1 rounded">demo123</code></li>
+          <div className="card bg-light border mb-3 p-3">
+            <p className="small fw-semibold mb-2">Try demo login:</p>
+            <ul className="small mb-0">
+              <li>Email: <code className="bg-white px-2 py-1 rounded">demo@example.com</code></li>
+              <li>Password: <code className="bg-white px-2 py-1 rounded">demo123</code></li>
             </ul>
           </div>
 
           {/* Role Switch */}
-          <div className="text-center text-sm text-gray-600">
+          <div className="text-center small text-muted">
             Not a {role}?{' '}
-            <Link
-              href={`/auth/login?role=${role === 'student' ? 'lecturer' : 'student'}`}
-              className="text-primary hover:text-secondary font-semibold transition-colors"
-            >
+            <Link href={`/auth/login?role=${role === 'student' ? 'lecturer' : 'student'}`} className="text-primary fw-semibold">
               Sign in as {role === 'student' ? 'Lecturer' : 'Student'}
             </Link>
           </div>
 
           {/* Back to Home */}
-          <div className="text-center mt-4">
-            <Link href="/" className="text-gray-600 hover:text-dark text-sm transition-colors">
-              ← Back to Home
-            </Link>
+          <div className="text-center mt-3">
+            <Link href="/" className="text-muted small">← Back to Home</Link>
           </div>
         </div>
       </div>

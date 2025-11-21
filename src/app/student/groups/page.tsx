@@ -25,51 +25,46 @@ export default function StudentGroupsPage() {
   ]
 
   return (
-    <div>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-dark mb-2">My Groups</h1>
-        <p className="text-gray-600">Manage your group memberships and collaborations</p>
+    <div className="container-fluid">
+      <div className="mb-3">
+        <h1 className="h3 mb-1">My Groups</h1>
+        <p className="text-muted mb-0">Manage your group memberships and collaborations</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="row g-3">
         {groups.map((group) => (
-          <div key={group.id} className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
-            <div className="mb-4">
-              <h3 className="text-lg font-bold text-dark">{group.name}</h3>
-              <p className="text-sm text-gray-600">{group.assignment}</p>
-            </div>
+          <div key={group.id} className="col-12 col-md-6 col-lg-4">
+            <div className="card h-100">
+              <div className="card-body d-flex flex-column">
+                <div className="mb-3">
+                  <h5 className="card-title mb-1">{group.name}</h5>
+                  <div className="small text-muted">{group.assignment}</div>
+                </div>
 
-            <div className="mb-4 space-y-2">
-              <div className="flex justify-between items-center text-sm">
-                <span className="text-gray-600">Members</span>
-                <span className="font-semibold text-dark">{group.members}/{group.maxMembers}</span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div
-                  className="bg-primary h-2 rounded-full"
-                  style={{ width: `${(group.members / group.maxMembers) * 100}%` }}
-                ></div>
-              </div>
-            </div>
+                <div className="mb-3">
+                  <div className="d-flex justify-content-between small text-muted mb-1">
+                    <span>Members</span>
+                    <strong className="text-dark">{group.members}/{group.maxMembers}</strong>
+                  </div>
+                  <div className="progress" style={{ height: 8 }}>
+                    <div className="progress-bar bg-primary" role="progressbar" style={{ width: `${(group.members / group.maxMembers) * 100}%` }} aria-valuenow={(group.members / group.maxMembers) * 100} aria-valuemin={0} aria-valuemax={100}></div>
+                  </div>
+                </div>
 
-            <div className="flex items-center justify-between">
-              <span className="text-xs px-2 py-1 bg-green-100 text-green-800 rounded-full">
-                {group.status}
-              </span>
-              <button className="text-primary hover:text-secondary font-semibold text-sm">
-                View Details →
-              </button>
+                <div className="mt-auto d-flex justify-content-between align-items-center">
+                  <span className="badge bg-success text-capitalize">{group.status}</span>
+                  <button className="btn btn-link p-0">View Details →</button>
+                </div>
+              </div>
             </div>
           </div>
         ))}
       </div>
 
       {groups.length === 0 && (
-        <div className="text-center py-12 bg-gray-50 rounded-lg">
-          <p className="text-gray-600 mb-4">No groups yet</p>
-          <button className="text-primary hover:text-secondary font-semibold">
-            Create or Join a Group →
-          </button>
+        <div className="text-center py-5 bg-light rounded">
+          <p className="text-muted mb-4">No groups yet</p>
+          <button className="btn btn-primary">Create or Join a Group →</button>
         </div>
       )}
     </div>

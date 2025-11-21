@@ -1,6 +1,9 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Tailwind directives removed to avoid editor diagnostics when Tailwind/PostCSS is not installed.
+   If you install Tailwind and PostCSS (recommended for full utility support), restore these lines:
+     @tailwind base;
+     @tailwind components;
+     @tailwind utilities;
+*/
 
 :root {
   --primary: #3B82F6;
@@ -39,6 +42,8 @@ code {
 .line-clamp-1 {
   display: -webkit-box;
   -webkit-line-clamp: 1;
+  /* standard property for compatibility with non-webkit engines */
+  line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -46,6 +51,8 @@ code {
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  /* standard property for compatibility with non-webkit engines */
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -53,6 +60,8 @@ code {
 .line-clamp-3 {
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  /* standard property for compatibility with non-webkit engines */
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -83,7 +92,23 @@ input[type='password'],
 input[type='number'],
 textarea,
 select {
-  @apply border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors;
+  /* Replaced Tailwind @apply with equivalent plain CSS to avoid editor diagnostics */
+  border: 1px solid #D1D5DB; /* tailwind border-gray-300 */
+  border-radius: 0.5rem; /* tailwind rounded-lg */
+  padding: 0.5rem 1rem; /* tailwind py-2 px-4 */
+  outline: none;
+  transition: color 0.2s, background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+input[type='text']:focus,
+input[type='email']:focus,
+input[type='password']:focus,
+input[type='number']:focus,
+textarea:focus,
+select:focus {
+  /* approximate of tailwind focus:ring-2 focus:ring-primary and focus:border-transparent */
+  box-shadow: 0 0 0 4px rgba(59,130,246,0.15); /* subtle blue ring */
+  border-color: transparent;
 }
 
 input[type='text']:disabled,
@@ -92,32 +117,81 @@ input[type='password']:disabled,
 input[type='number']:disabled,
 textarea:disabled,
 select:disabled {
-  @apply bg-gray-100 cursor-not-allowed;
+  background-color: #F3F4F6; /* tailwind bg-gray-100 */
+  cursor: not-allowed;
 }
 
 /* Button Styles */
 .btn {
-  @apply inline-flex items-center justify-center px-4 py-2 font-semibold rounded-lg transition-all duration-200;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem; /* px-4 py-2 */
+  font-weight: 600;
+  border-radius: 0.5rem; /* rounded-lg */
+  transition: all 0.2s;
 }
 
 .btn-primary {
-  @apply btn bg-primary text-white hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-primary;
+  background-color: var(--primary);
+  color: #ffffff;
+}
+.btn-primary:hover {
+  background-color: var(--secondary);
+}
+.btn-primary:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(59,130,246,0.15);
 }
 
 .btn-secondary {
-  @apply btn bg-secondary text-white hover:bg-primary focus:outline-none focus:ring-2 focus:ring-secondary;
+  background-color: var(--secondary);
+  color: #ffffff;
+}
+.btn-secondary:hover {
+  background-color: var(--primary);
+}
+.btn-secondary:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(30,64,175,0.15);
 }
 
 .btn-success {
-  @apply btn bg-success text-white hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-success;
+  background-color: var(--success);
+  color: #ffffff;
+}
+.btn-success:hover {
+  background-color: #059669; /* tailwind green-600 */
+}
+.btn-success:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(16,185,129,0.15);
 }
 
 .btn-danger {
-  @apply btn bg-danger text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-danger;
+  background-color: var(--danger);
+  color: #ffffff;
+}
+.btn-danger:hover {
+  background-color: #DC2626; /* tailwind red-600 */
+}
+.btn-danger:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(239,68,68,0.15);
 }
 
 .btn-outline {
-  @apply btn border-2 border-primary text-primary hover:bg-primary hover:text-white focus:outline-none focus:ring-2 focus:ring-primary;
+  border: 2px solid var(--primary);
+  color: var(--primary);
+  background: transparent;
+}
+.btn-outline:hover {
+  background-color: var(--primary);
+  color: #ffffff;
+}
+.btn-outline:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(59,130,246,0.15);
 }
 
 /* Animations */

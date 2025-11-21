@@ -137,3 +137,63 @@ export interface Notification {
   isRead: boolean
   createdAt: Date
 }
+
+// Question Types
+export type QuestionType = 'multiple-choice' | 'short-answer' | 'essay' | 'true-false' | 'fill-blank'
+
+export interface Question {
+  id: string
+  title: string
+  description: string
+  type: QuestionType
+  courseId: string
+  assignmentId?: string
+  text: string
+  options?: string[] // For multiple choice or true/false
+  correctAnswer?: string // For MCQ/true-false/fill-blank
+  marks: number
+  createdBy: string // Lecturer ID
+  createdAt: Date
+  updatedAt: Date
+}
+
+export interface QuestionSet {
+  id: string
+  title: string
+  description: string
+  courseId: string
+  questions: string[] // Question IDs
+  totalMarks: number
+  dueDate: Date
+  createdBy: string // Lecturer ID
+  createdAt: Date
+  updatedAt: Date
+}
+
+export type AnswerStatus = 'not-started' | 'in-progress' | 'submitted' | 'marked'
+
+export interface StudentAnswer {
+  id: string
+  questionId: string
+  questionSetId: string
+  studentId: string
+  answer: string
+  status: AnswerStatus
+  marksObtained?: number
+  feedback?: string
+  submittedAt?: Date
+  markedAt?: Date
+  markedBy?: string // Lecturer ID
+}
+
+export interface QuestionResponse {
+  id: string
+  questionSetId: string
+  studentId: string
+  answers: StudentAnswer[]
+  totalMarks: number
+  obtainedMarks?: number
+  status: 'in-progress' | 'submitted' | 'marked'
+  submittedAt?: Date
+  markedAt?: Date
+}

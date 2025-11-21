@@ -1,8 +1,9 @@
-'use client'
+"use client"
 
 import React, { useState } from 'react'
 import { BarChart3, TrendingUp, Award } from 'lucide-react'
 import type { Semester } from '@/lib/types'
+import { getGradeColor } from '@/lib/utils'
 
 export default function StudentResultsPage() {
   const [selectedSemester, setSelectedSemester] = useState<Semester>('first')
@@ -48,140 +49,108 @@ export default function StudentResultsPage() {
   const maximumMarks = sampleResults.reduce((sum, r) => sum + r.totalMarks, 0)
   const averagePercentage = Math.round((totalMarks / maximumMarks) * 100)
 
-  const getGradeColor = (grade: string) => {
-    const colors: Record<string, string> = {
-      'A+': 'text-green-600 bg-green-50',
-      A: 'text-green-600 bg-green-50',
-      'B+': 'text-blue-600 bg-blue-50',
-      B: 'text-blue-600 bg-blue-50',
-      'C+': 'text-yellow-600 bg-yellow-50',
-      C: 'text-yellow-600 bg-yellow-50',
-      D: 'text-orange-600 bg-orange-50',
-      F: 'text-red-600 bg-red-50',
-    }
-    return colors[grade] || 'text-gray-600 bg-gray-50'
-  }
+  // now using getGradeColor from utils which returns Bootstrap classes
 
   return (
-    <div>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-dark mb-2">My Results</h1>
-        <p className="text-gray-600">View your semester-based results and grades</p>
+    <div className="container-fluid">
+      <div className="mb-3">
+        <h1 className="h3 mb-1">My Results</h1>
+        <p className="text-muted mb-0">View your semester-based results and grades</p>
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-lg p-6 mb-6 border border-gray-200">
-        <div className="flex flex-wrap gap-4 items-center">
-          <div>
-            <label className="block text-sm font-semibold text-dark mb-2">Semester</label>
-            <select
-              value={selectedSemester}
-              onChange={(e) => setSelectedSemester(e.target.value as Semester)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-            >
-              <option value="first">First Semester</option>
-              <option value="second">Second Semester</option>
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-semibold text-dark mb-2">Year</label>
-            <select
-              value={selectedYear}
-              onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-            >
-              {[2021, 2022, 2023, 2024, 2025].map((year) => (
-                <option key={year} value={year}>
-                  {year}
-                </option>
-              ))}
-            </select>
+      <div className="card mb-4">
+        <div className="card-body">
+          <div className="row g-3">
+            <div className="col-md-4">
+              <label className="form-label small">Semester</label>
+              <select value={selectedSemester} onChange={(e) => setSelectedSemester(e.target.value as Semester)} className="form-select">
+                <option value="first">First Semester</option>
+                <option value="second">Second Semester</option>
+              </select>
+            </div>
+            <div className="col-md-4">
+              <label className="form-label small">Year</label>
+              <select value={selectedYear} onChange={(e) => setSelectedYear(parseInt(e.target.value))} className="form-select">
+                {[2021, 2022, 2023, 2024, 2025].map((year) => (
+                  <option key={year} value={year}>{year}</option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Performance Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-6 border border-blue-200">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600 font-semibold">Average Percentage</p>
-              <p className="text-3xl font-bold text-blue-600 mt-2">{averagePercentage}%</p>
+      <div className="row g-3 mb-4">
+        <div className="col-md-4">
+          <div className="card p-3">
+            <div className="d-flex justify-content-between align-items-center">
+              <div>
+                <div className="small text-muted">Average Percentage</div>
+                <div className="h4 mt-1">{averagePercentage}%</div>
+              </div>
+              <BarChart3 size={32} className="text-primary opacity-50" />
             </div>
-            <BarChart3 size={32} className="text-blue-600 opacity-50" />
           </div>
         </div>
-
-        <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-6 border border-green-200">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600 font-semibold">Total Marks</p>
-              <p className="text-3xl font-bold text-green-600 mt-2">
-                {totalMarks}/{maximumMarks}
-              </p>
+        <div className="col-md-4">
+          <div className="card p-3">
+            <div className="d-flex justify-content-between align-items-center">
+              <div>
+                <div className="small text-muted">Total Marks</div>
+                <div className="h4 mt-1">{totalMarks}/{maximumMarks}</div>
+              </div>
+              <TrendingUp size={32} className="text-success opacity-50" />
             </div>
-            <TrendingUp size={32} className="text-green-600 opacity-50" />
           </div>
         </div>
-
-        <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-6 border border-purple-200">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600 font-semibold">Courses</p>
-              <p className="text-3xl font-bold text-purple-600 mt-2">{sampleResults.length}</p>
+        <div className="col-md-4">
+          <div className="card p-3">
+            <div className="d-flex justify-content-between align-items-center">
+              <div>
+                <div className="small text-muted">Courses</div>
+                <div className="h4 mt-1">{sampleResults.length}</div>
+              </div>
+              <Award size={32} className="text-purple-600 opacity-50" />
             </div>
-            <Award size={32} className="text-purple-600 opacity-50" />
           </div>
         </div>
       </div>
 
       {/* Results Table */}
-      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-gray-50 border-b border-gray-200">
-            <tr>
-              <th className="text-left px-6 py-3 font-semibold text-sm text-gray-700">Course</th>
-              <th className="text-left px-6 py-3 font-semibold text-sm text-gray-700">Code</th>
-              <th className="text-center px-6 py-3 font-semibold text-sm text-gray-700">Marks</th>
-              <th className="text-center px-6 py-3 font-semibold text-sm text-gray-700">Grade</th>
-              <th className="text-center px-6 py-3 font-semibold text-sm text-gray-700">Percentage</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sampleResults.map((result, index) => (
-              <tr key={result.id} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                <td className="px-6 py-4 text-sm font-semibold text-dark">{result.courseName}</td>
-                <td className="px-6 py-4 text-sm text-gray-600">{result.courseCode}</td>
-                <td className="px-6 py-4 text-sm text-center">
-                  <span className="font-semibold text-dark">{result.obtainedMarks}</span>
-                  <span className="text-gray-500"> / {result.totalMarks}</span>
-                </td>
-                <td className="px-6 py-4 text-sm text-center">
-                  <span className={`px-3 py-1 rounded-full font-bold ${getGradeColor(result.grade)}`}>
-                    {result.grade}
-                  </span>
-                </td>
-                <td className="px-6 py-4 text-sm text-center">
-                  <span className="font-semibold text-dark">
-                    {Math.round((result.obtainedMarks / result.totalMarks) * 100)}%
-                  </span>
-                </td>
+      <div className="card mb-4">
+        <div className="table-responsive">
+          <table className="table table-hover mb-0 align-middle">
+            <thead className="table-light">
+              <tr>
+                <th>Course</th>
+                <th>Code</th>
+                <th className="text-center">Marks</th>
+                <th className="text-center">Grade</th>
+                <th className="text-center">Percentage</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {sampleResults.map((result) => (
+                <tr key={result.id}>
+                  <td className="fw-semibold">{result.courseName}</td>
+                  <td className="small text-muted">{result.courseCode}</td>
+                  <td className="text-center"><span className="fw-semibold">{result.obtainedMarks}</span> <span className="text-muted">/ {result.totalMarks}</span></td>
+                  <td className="text-center"><span className={`badge ${getGradeColor(result.grade)}`}>{result.grade}</span></td>
+                  <td className="text-center"><span className="fw-semibold">{Math.round((result.obtainedMarks / result.totalMarks) * 100)}%</span></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* GPA Info */}
-      <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-6">
-        <h3 className="text-lg font-semibold text-dark mb-2">Semester Performance</h3>
-        <p className="text-gray-600 mb-4">
-          You have completed <strong>{sampleResults.length} courses</strong> in {selectedSemester === 'first' ? 'First' : 'Second'} Semester {selectedYear}.
-          Your current average is <strong>{averagePercentage}%</strong> across all courses.
-        </p>
-        <button className="text-blue-600 hover:text-blue-800 font-semibold text-sm">
-          Download Transcript →
-        </button>
+      <div className="card p-3">
+        <h5 className="mb-2">Semester Performance</h5>
+        <p className="text-muted mb-3">You have completed <strong>{sampleResults.length} courses</strong> in {selectedSemester === 'first' ? 'First' : 'Second'} Semester {selectedYear}. Your current average is <strong>{averagePercentage}%</strong> across all courses.</p>
+        <button className="btn btn-link p-0">Download Transcript →</button>
       </div>
     </div>
   )

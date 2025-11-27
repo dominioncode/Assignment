@@ -59,7 +59,7 @@ export default function StudentResultsPage() {
       </div>
 
       {/* Filters */}
-      <div className="card mb-4">
+      <div className="card mb-4 border-0 shadow-sm">
         <div className="card-body">
           <div className="row g-3">
             <div className="col-md-4">
@@ -84,7 +84,7 @@ export default function StudentResultsPage() {
       {/* Performance Summary Cards */}
       <div className="row g-3 mb-4">
         <div className="col-md-4">
-          <div className="card p-3">
+          <div className="card p-3 border-0 shadow-sm">
             <div className="d-flex justify-content-between align-items-center">
               <div>
                 <div className="small text-muted">Average Percentage</div>
@@ -95,7 +95,7 @@ export default function StudentResultsPage() {
           </div>
         </div>
         <div className="col-md-4">
-          <div className="card p-3">
+          <div className="card p-3 border-0 shadow-sm">
             <div className="d-flex justify-content-between align-items-center">
               <div>
                 <div className="small text-muted">Total Marks</div>
@@ -106,7 +106,7 @@ export default function StudentResultsPage() {
           </div>
         </div>
         <div className="col-md-4">
-          <div className="card p-3">
+          <div className="card p-3 border-0 shadow-sm">
             <div className="d-flex justify-content-between align-items-center">
               <div>
                 <div className="small text-muted">Courses</div>
@@ -119,9 +119,9 @@ export default function StudentResultsPage() {
       </div>
 
       {/* Results Table */}
-      <div className="card mb-4">
+      <div className="card mb-4 border-0 shadow-sm">
         <div className="table-responsive">
-          <table className="table table-hover mb-0 align-middle">
+          <table className="table table-hover mb-0 align-middle table-theme">
             <thead className="table-light">
               <tr>
                 <th>Course</th>
@@ -147,10 +147,10 @@ export default function StudentResultsPage() {
       </div>
 
       {/* GPA Info */}
-      <div className="card p-3">
+      <div className="card p-3 assignment-card border-0 shadow-sm">
         <h5 className="mb-2">Semester Performance</h5>
         <p className="text-muted mb-3">You have completed <strong>{sampleResults.length} courses</strong> in {selectedSemester === 'first' ? 'First' : 'Second'} Semester {selectedYear}. Your current average is <strong>{averagePercentage}%</strong> across all courses.</p>
-        <button className="btn btn-link p-0">Download Transcript →</button>
+        <button aria-label="Download transcript" className="btn btn-link p-0">Download Transcript →</button>
       </div>
     </div>
   )

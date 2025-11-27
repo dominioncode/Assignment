@@ -1,12 +1,13 @@
 ﻿"use client"
 
 import React, { useState, useEffect } from 'react'
+import Image from 'next/image'
 import { BookOpen, Users, FileText, BarChart3, Bell, LogOut, Menu } from 'lucide-react'
+import ReducedMotionToggle from './ReducedMotionToggle'
 import SidebarNav from '@/components/admin/SidebarNav'
 import type { User } from '@/lib/types'
 
-// Load Bootstrap JS for offcanvas and dropdowns
-import 'bootstrap/dist/js/bootstrap.bundle.min.js'
+// Load Bootstrap JS for offcanvas and dropdowns at runtime (client-only)
 
 interface DashboardLayoutProps {
   user: User
@@ -32,7 +33,18 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ user, onLogout, child
           { icon: BarChart3, label: 'My Results', href: '/student/results' },
         ]
 
-  useEffect(() => {}, [])
+  useEffect(() => {
+    // dynamic import inside useEffect so this code only runs on the client
+    ;(async () => {
+      try {
+        // @ts-ignore - bootstrap JS has no types for this path
+        await import('bootstrap/dist/js/bootstrap.bundle.min.js')
+      } catch (err) {
+        // ignore if bootstrap JS cannot be loaded in some environments
+        console.warn('Bootstrap JS failed to load:', err)
+      }
+    })()
+  }, [])
 
   return (
     <div className="d-flex vh-100">
@@ -66,6 +78,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ user, onLogout, child
             </form>
 
             <div className="d-flex align-items-center">
+              <ReducedMotionToggle />
               <button className="btn btn-light me-3 position-relative">
                 <Bell />
                 <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">3</span>
@@ -76,7 +89,15 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ user, onLogout, child
                   <div className="fw-semibold">{user.name}</div>
                   <div className="small text-muted">{user.email}</div>
                 </div>
-                <img src={user.profilePicture || `https://ui-avatars.com/api/?name=${user.name}`} alt={user.name} className="rounded-circle" style={{ width: 44, height: 44 }} />
+                <div style={{ width: 44, height: 44, position: 'relative' }} className="rounded-circle overflow-hidden">
+                  <Image
+                    src={user.profilePicture || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}`}
+                    alt={user.name}
+                    width={44}
+                    height={44}
+                    className="rounded-circle"
+                  />
+                </div>
                 <button className="btn btn-link text-dark ms-2" onClick={onLogout} title="Logout">
                   <LogOut />
                 </button>

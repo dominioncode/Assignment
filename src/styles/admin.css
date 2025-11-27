@@ -13,6 +13,7 @@ body {
 aside.bg-dark {
   width: var(--sidebar-width);
   min-width: var(--sidebar-width);
+  padding-bottom: 2rem;
 }
 
 /* Sidebar links */
@@ -44,4 +45,32 @@ main.p-4 {
 .brand-gradient h1,
 .brand-gradient h2 {
   color: rgba(255,255,255,0.95);
+}
+
+/* Header user button */
+.navbar .btn-light { border-radius: 10px; padding: .5rem .6rem }
+
+/* Offcanvas background for mobile */
+.offcanvas { background: linear-gradient(180deg, rgba(255,255,255,0.88), rgba(255,255,255,0.95)); }
+
+/* Improve card spacing in content */
+main.p-4 > * { margin-bottom: 1rem }
+
+/* Sidebar nav item visuals */
+.nav-link { display:flex; align-items:center; gap: .6rem; padding: .6rem .9rem; margin: .2rem .6rem; border-radius: 8px }
+.nav-link .me-2 svg { opacity: 0.9 }
+.nav-link.text-white { color: rgba(255,255,255,0.85) }
+.nav-link:hover { text-decoration: none }
+
+/* subtle separators in sidebar */
+.nav .nav-link + .nav-link { margin-top: 0.2rem }
+
+/* Auth & marketing panel tweaks */
+.brand-gradient { padding: 2.5rem }
+.brand-gradient h1 { font-size: 2.2rem; letter-spacing: -0.01em }
+.card { border-radius: 14px }
+
+/* Responsive layout tweaks */
+@media (max-width: 992px){
+  aside.bg-dark { display:none }
 }

@@ -1,12 +1,15 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { Search, Filter, Plus } from 'lucide-react'
 import AssignmentCard from '@/components/AssignmentCard'
+import Modal from '@/components/Modal'
 import type { Assignment } from '@/lib/types'
 
 export default function StudentAssignmentsPage() {
   const [searchTerm, setSearchTerm] = useState('')
+  const [showCreateModal, setShowCreateModal] = useState(false)
+  const searchRef = useRef<HTMLInputElement | null>(null)
   const [filterType, setFilterType] = useState<'all' | 'individual' | 'group' | 'study'>('all')
   const [filterStatus, setFilterStatus] = useState<'all' | 'pending' | 'submitted' | 'graded'>(
     'all'
@@ -54,6 +57,24 @@ export default function StudentAssignmentsPage() {
     return matchesSearch && matchesType
   })
 
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      // focus search with '/'
+      if (e.key === '/' && document.activeElement !== searchRef.current) {
+        e.preventDefault()
+        searchRef.current?.focus()
+      }
+      // open create modal with 'n'
+      if (e.key.toLowerCase() === 'n') {
+        setShowCreateModal(true)
+      }
+      // close with Escape
+      if (e.key === 'Escape') setShowCreateModal(false)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
+
   return (
     <div className="container-fluid">
       <div className="mb-3">
@@ -62,14 +83,15 @@ export default function StudentAssignmentsPage() {
       </div>
 
       {/* Search and Filter Bar */}
-      <div className="card mb-4">
+      <div className="card mb-4 shadow-sm border-0">
         <div className="card-body">
           <div className="row g-3">
-            <div className="col-md-6">
+            <div className="col-md-6 d-flex align-items-center gap-2">
               <div className="input-group">
                 <span className="input-group-text bg-white"><Search size={18} /></span>
-                <input type="text" placeholder="Search assignments..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="form-control" />
+                <input ref={searchRef} aria-label="Search assignments" type="text" placeholder="Search assignments..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="form-control form-control-lg" />
               </div>
+              <button aria-label="Create new assignment" onClick={() => setShowCreateModal(true)} className="btn btn-primary ms-2 d-none d-md-inline-flex align-items-center"><Plus size={14} className="me-2"/>New</button>
             </div>
             <div className="col-md-3">
               <select value={filterType} onChange={(e) => setFilterType(e.target.value as any)} className="form-select">
@@ -90,6 +112,16 @@ export default function StudentAssignmentsPage() {
           </div>
         </div>
       </div>
+      <Modal open={showCreateModal} onClose={() => setShowCreateModal(false)} title="Create Assignment">
+        <div className="mb-2">
+          <input className="form-control mb-2" placeholder="Title" />
+          <textarea className="form-control" placeholder="Short description" />
+        </div>
+        <div className="d-flex justify-content-end gap-2 mt-3">
+          <button className="btn btn-outline-secondary" onClick={() => setShowCreateModal(false)}>Cancel</button>
+          <button className="btn btn-primary" onClick={() => { setShowCreateModal(false); /* no-op for demo */ }}>Create</button>
+        </div>
+      </Modal>
 
       {/* Assignment Cards */}
       <div className="row g-3">

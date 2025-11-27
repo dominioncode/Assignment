@@ -1,5 +1,7 @@
 'use client'
 
+export const dynamic = 'force-dynamic'
+
 import { useState } from 'react'
 import { useAppStore } from '@/lib/store'
 import { StudentAnswer } from '@/lib/types'
@@ -98,7 +100,7 @@ export default function StudentQuestionsPage() {
         <div className="row">
           <div className="col-md-8">
             {/* Question Set Selector */}
-            <div className="card mb-4">
+            <div className="card mb-4 border-0 shadow-sm">
               <div className="card-header">
                 <h5 className="mb-0">Available Question Sets</h5>
               </div>
@@ -126,7 +128,7 @@ export default function StudentQuestionsPage() {
 
             {/* Questions Display */}
             {selectedQuestionSet && setQuestions.length > 0 ? (
-              <div className="card">
+              <div className="card border-0 shadow-sm">
                 <div className="card-header">
                   <h5 className="mb-0">{selectedSet?.title}</h5>
                   <small className="text-muted">{selectedSet?.description}</small>
@@ -199,10 +201,11 @@ export default function StudentQuestionsPage() {
                   ))}
 
                   <div className="d-flex gap-2 mt-4">
-                    <button className="btn btn-primary" onClick={handleSubmitAnswers}>
+                    <button aria-label="Submit answers" className="btn btn-primary" onClick={handleSubmitAnswers}>
                       Submit Answers
                     </button>
                     <button
+                      aria-label="Cancel answers"
                       className="btn btn-secondary"
                       onClick={() => {
                         setSelectedQuestionSet('')
@@ -223,7 +226,7 @@ export default function StudentQuestionsPage() {
 
           {/* Submitted Responses Sidebar */}
           <div className="col-md-4">
-            <div className="card">
+            <div className="card border-0 shadow-sm">
               <div className="card-header">
                 <h5 className="mb-0">Your Submissions</h5>
               </div>

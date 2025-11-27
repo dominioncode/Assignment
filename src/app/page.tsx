@@ -91,17 +91,52 @@ export default function Home() {
       </header>
 
       {/* Hero */}
-      <section className="text-center py-5 mb-4">
-        <h1 className="display-6 fw-bold">Your Complete Study Management Platform</h1>
-        <p className="lead text-muted">Manage assignments, coordinate group work, track results, and streamline academic collaboration between students and lecturers</p>
+      <section className="text-center py-6 mb-5">
+        <div className="container" style={{ maxWidth: 1100 }}>
+          <div className="card p-4 shadow-sm border-0" style={{ background: 'linear-gradient(120deg, rgba(51,102,255,0.06), rgba(111,66,193,0.04))' }}>
+            <div className="row align-items-center g-4">
+              <div className="col-12 col-lg-7 text-start">
+                <h1 className="display-5 fw-bold">Your Complete Study Management Platform</h1>
+                <p className="lead text-muted mb-3">Manage assignments, coordinate group work, track results and streamline academic collaboration between students and lecturers — built for clarity and speed.</p>
+                <div className="d-flex gap-2">
+                  <Link href="/auth/register" className="btn btn-primary btn-lg">Create an account</Link>
+                  <Link href="/auth/login" className="btn btn-outline btn-lg">Sign in <ArrowRight size={14} className="ms-2"/></Link>
+                </div>
+                <div className="mt-3 small text-muted">Trusted by students and lecturers to manage coursework with confidence</div>
+              </div>
+              <div className="col-12 col-lg-5 text-center d-none d-lg-block">
+                <div style={{ width: 260, margin: '0 auto' }}>
+                  <div className="card p-3 shadow-sm border-0">
+                    <div className="d-flex align-items-center justify-content-between">
+                      <div>
+                        <div className="fw-semibold">Assignment: Database Project</div>
+                        <div className="small text-muted">Due in 3 days • Group</div>
+                      </div>
+                      <div className="text-end">
+                        <div className="badge bg-primary">78%</div>
+                      </div>
+                    </div>
+                    <div className="mt-3 progress" style={{ height: 8, borderRadius: 8 }}>
+                      <div className="progress-bar bg-primary" style={{ width: '78%' }}></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* Role Selection */}
       <section className="mb-5">
-        <div className="row g-3">
+            <div className="row g-3">
           {roles.map((item) => (
             <div key={item.role} className="col-12 col-md-6">
-              <div className={`card ${selectedRole === item.role ? 'border-primary' : ''}`} onClick={() => setSelectedRole(item.role)} style={{ cursor: 'pointer' }}>
+              <div
+                className={`card h-100 ${selectedRole === item.role ? 'border-4 border-primary shadow-sm' : ''}`}
+                onClick={() => setSelectedRole(item.role)}
+                style={{ cursor: 'pointer' }}
+              >
                 <div className="card-body">
                   <h5 className="card-title">{item.title}</h5>
                   <p className="text-muted">{item.description}</p>
@@ -110,7 +145,10 @@ export default function Home() {
                       <li key={index} className="text-muted small">{feature}</li>
                     ))}
                   </ul>
-                  <Link href={selectedRole === item.role ? `/auth/login?role=${item.role}` : '#'} className={`btn ${selectedRole === item.role ? 'btn-primary' : 'btn-outline-light'}`}>
+                  <Link
+                    href={selectedRole === item.role ? `/auth/login?role=${item.role}` : '#'}
+                    className={`btn ${selectedRole === item.role ? 'btn-primary' : 'btn-outline'}`}
+                  >
                     Get Started <ArrowRight size={16} className="ms-2" />
                   </Link>
                 </div>
@@ -126,10 +164,14 @@ export default function Home() {
         <div className="row g-3">
           {features.map((feature, index) => (
             <div key={index} className="col-12 col-md-6 col-lg-4">
-              <div className="card h-100">
+              <div className="card h-100 border-0 shadow-sm">
                 <div className="card-body">
-                  <feature.icon size={28} className="mb-3" />
-                  <h5 className="card-title">{feature.title}</h5>
+                  <div className="d-flex align-items-center gap-3 mb-3">
+                    <div className="p-2 rounded-3" style={{ background: 'linear-gradient(90deg,var(--brand-1),var(--brand-2))', color: 'white' }}>
+                      <feature.icon size={20} />
+                    </div>
+                    <h5 className="mb-0">{feature.title}</h5>
+                  </div>
                   <p className="text-muted">{feature.description}</p>
                 </div>
               </div>

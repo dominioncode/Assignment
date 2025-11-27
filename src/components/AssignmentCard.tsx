@@ -24,7 +24,7 @@ export const AssignmentCard: React.FC<AssignmentCardProps> = ({
 
   return (
     <AdminCard
-      className="cursor-pointer"
+      className="cursor-pointer assignment-card"
       title={<>
         <div className="d-flex align-items-center gap-2">
           {assignment.type === 'group' && <Users size={16} className="text-primary" />}
@@ -47,7 +47,7 @@ export const AssignmentCard: React.FC<AssignmentCardProps> = ({
                 <span>Due in {daysLeft} days</span>
               )}
             </div>
-            <button className="btn btn-link btn-sm">View Details →</button>
+            <button aria-label={`View details for ${assignment.title}`} className="btn btn-link btn-sm">View Details →</button>
           </div>
         ) : null
       }

@@ -10,7 +10,7 @@ interface AdminTableProps {
 export default function AdminTable({ children, className = '' }: AdminTableProps) {
   return (
     <div className={`table-responsive ${className}`}>
-      <table className="table table-hover align-middle mb-0">{children}</table>
+      <table className="table table-hover align-middle mb-0 table-theme">{children}</table>
     </div>
   )
 }

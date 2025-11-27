@@ -46,7 +46,7 @@ export default function StudentMaterialsPage() {
       <div className="row g-3">
         {materials.map((material) => (
           <div key={material.id} className="col-12">
-            <div className="card">
+            <div className="card assignment-card border-0 shadow-sm">
               <div className="card-body d-flex align-items-start justify-content-between">
                 <div className="d-flex align-items-start gap-3">
                   <div className="mt-1">{getFileIcon(material.type)}</div>
@@ -60,7 +60,7 @@ export default function StudentMaterialsPage() {
                     </div>
                   </div>
                 </div>
-                <button className="btn btn-outline-primary btn-sm"><Download /></button>
+                <button aria-label={`Download ${material.title}`} className="btn btn-outline-primary btn-sm"><Download /></button>
               </div>
             </div>
           </div>

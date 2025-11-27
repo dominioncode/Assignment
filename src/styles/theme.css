@@ -1,0 +1,137 @@
+/* Theme & visual polish for StudyHub */
+:root{
+  --brand-1: #3366FF; /* deeper blue */
+  --brand-2: #6F42C1; /* purple accent */
+  --bg-soft: #F6F8FB;
+  --card-bg: #ffffff;
+  --muted: #6b7280;
+  --glass: rgba(255,255,255,0.6);
+  --shadow-1: 0 6px 18px rgba(21,24,35,0.08);
+  --shadow-2: 0 12px 30px rgba(21,24,35,0.12);
+  --radius-lg: 12px;
+}
+
+/* Smooth page background */
+body {
+  background: linear-gradient(180deg, #F7F9FC 0%, #F1F5F9 60%);
+  color: #0f172a;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* Headings */
+h1,h2,h3,h4,h5{ color: #0b1220; font-weight:700; letter-spacing: -0.01em }
+h1{ font-size: clamp(1.6rem, 2.4vw, 2.3rem) }
+h2{ font-size: clamp(1.3rem, 1.8vw, 1.6rem) }
+
+/* Page container polish */
+.container, .card, main.p-4 { transition: box-shadow .18s ease, transform .18s ease }
+.card { border: none; border-radius: var(--radius-lg); box-shadow: var(--shadow-1); background: var(--card-bg) }
+.card:hover { box-shadow: var(--shadow-2); transform: translateY(-2px) }
+
+/* Navbar / header */
+.navbar {
+  background: linear-gradient(90deg, rgba(255,255,255,0.8), rgba(255,255,255,0.65));
+  backdrop-filter: blur(6px);
+  box-shadow: 0 2px 8px rgba(16,24,40,0.06);
+}
+
+.navbar .form-control { border-radius: 28px; padding-left: 1.1rem; padding-right: 1.1rem }
+
+/* Sidebar */
+aside.bg-dark {
+  background: linear-gradient(180deg, rgba(10,13,27,0.95), rgba(10,13,27,0.88));
+  padding-top: 1.25rem;
+  border-right: 1px solid rgba(255,255,255,0.03);
+}
+.nav-link { transition: background-color .12s, color .12s }
+.nav-link.active, .nav-link:hover { background: linear-gradient(90deg,var(--brand-1),var(--brand-2)); color: #fff !important; border-radius: 8px }
+
+/* Cards and content */
+.card .card-header { background: linear-gradient(90deg, rgba(51,102,255,0.06), rgba(111,66,193,0.06)); border-bottom: none; font-weight:600 }
+
+.assignment-card { border-radius: 14px; padding: 1rem; display:block }
+.assignment-card .title { font-weight:700; color: #08102a }
+.assignment-card .meta { color: var(--muted); font-size: .9rem }
+
+/* Buttons refinement */
+.btn-primary { border-radius: 8px; padding: .55rem 1rem; box-shadow: 0 6px 18px rgba(51,102,255,0.12) }
+.btn-outline { border-radius: 8px }
+
+/* Accessible focus states */
+.btn:focus-visible, .form-control:focus-visible, a:focus-visible {
+  outline: 3px solid rgba(51,102,255,0.16);
+  outline-offset: 2px;
+}
+
+/* Micro-interactions */
+.card, .assignment-card, .table-theme tbody tr td { transition: transform .15s ease, box-shadow .15s ease }
+.card:active, .assignment-card:active { transform: translateY(1px) }
+.assignment-card:hover { transform: translateY(-4px); box-shadow: 0 14px 30px rgba(17,24,39,0.08) }
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .card, .assignment-card, .table-theme tbody tr td, .btn, .nav-link, .form-control {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* When a user explicitly chooses reduced motion (UI toggle), the .reduce-motion class is applied to the root element */
+html.reduce-motion .card,
+html.reduce-motion .assignment-card,
+html.reduce-motion .table-theme tbody tr td,
+html.reduce-motion .btn,
+html.reduce-motion .nav-link,
+html.reduce-motion .form-control {
+  transition: none !important;
+  animation: none !important;
+}
+
+/* Focus rings for keyboard navigation on more interactive elements */
+.btn:focus-visible, .form-control:focus-visible, a:focus-visible, .btn-link:focus-visible, .nav-link:focus-visible, .card:focus-visible {
+  outline: 3px solid rgba(51,102,255,0.18);
+  outline-offset: 3px;
+}
+.btn, .nav-link { transition: transform .12s ease, opacity .12s ease }
+.btn:hover { transform: translateY(-2px) }
+
+/* Mobile friendly touch sizes */
+@media (max-width: 576px){
+  .btn { padding: .65rem 1.1rem }
+  .form-control { padding: .8rem 1rem }
+}
+
+/* Pretty table */
+table { border-collapse: separate; border-spacing: 0; overflow: hidden }
+thead th { background: linear-gradient(90deg,var(--brand-1),var(--brand-2)); color: white; font-weight:600 }
+tbody tr { background: transparent }
+tbody tr td { border-bottom: 1px solid rgba(15,23,42,0.06) }
+
+/* Themed table appearance */
+.table-theme thead th { border: none; padding: 0.9rem 1rem; }
+.table-theme tbody td { padding: .9rem 1rem; background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.92)); }
+.table-theme tbody tr:hover td { background: linear-gradient(90deg, rgba(51,102,255,0.03), rgba(111,66,193,0.03)); transform: translateY(-2px); box-shadow: 0 6px 18px rgba(17,24,39,0.04); }
+.table-theme { border-radius: 12px; overflow: hidden; }
+
+/* Form controls refinement */
+.form-control { border-radius: 10px; padding: .7rem 1rem; border: 1px solid rgba(15,23,42,0.08); }
+.form-control:focus { box-shadow: 0 8px 30px rgba(51,102,255,0.08); border-color: rgba(51,102,255,0.28); }
+
+/* Small badges */
+.badge { border-radius: 999px; padding: 0.35em 0.6em; font-weight:700 }
+
+/* Cards: make titles and footers stand out */
+.card .card-title { color: #08102a; font-weight:700 }
+.card .card-footer { background: transparent; border-top: none; color: var(--muted); font-size: .9rem }
+
+/* subtle link style */
+a.btn-link { color: var(--brand-1); text-decoration: none; }
+a.btn-link:hover { text-decoration: underline; color: var(--brand-2); }
+
+/* Footer subtle */
+footer small { color: #475569 }
+
+/* responsive tweaks */
+@media (max-width: 768px){
+  .nav-link.active, .nav-link:hover { border-radius: 6px }
+}

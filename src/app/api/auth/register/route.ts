@@ -7,9 +7,9 @@ export async function POST(req: Request) {
   }
 
   try {
-    const bcrypt = await import('bcrypt')
-    const knexModule = await import('../../../../server/db')
-    const db = knexModule.db
+    const bcrypt = await import('bcryptjs')
+    const knexModule = await import('../../../../../server/db')
+    const db = knexModule.getDb()
     const BCRYPT_SALT_ROUNDS = parseInt(process.env.BCRYPT_SALT_ROUNDS || '10', 10)
 
     const hashedPassword = await bcrypt.hash(password, BCRYPT_SALT_ROUNDS)
@@ -24,7 +24,8 @@ export async function POST(req: Request) {
     return NextResponse.json({ id }, { status: 201 })
   } catch (err: any) {
     console.error(err)
-    if (err && err.code === 'SQLITE_CONSTRAINT') {
+    // support both sqlite and mysql duplicate key errors
+    if (err && (err.code === 'SQLITE_CONSTRAINT' || err.code === 'ER_DUP_ENTRY')) {
       return NextResponse.json({ error: 'Email already exists' }, { status: 409 })
     }
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })

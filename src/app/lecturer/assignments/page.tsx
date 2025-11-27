@@ -1,12 +1,14 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { Plus, Search, Filter, Edit, Trash2, Eye } from 'lucide-react'
+import Modal from '@/components/Modal'
 
 export default function LecturerAssignmentsPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [filterType, setFilterType] = useState<'all' | 'individual' | 'group' | 'study'>('all')
   const [showCreateModal, setShowCreateModal] = useState(false)
+  const searchRef = useRef<HTMLInputElement | null>(null)
 
   const assignments = [
     {
@@ -39,6 +41,19 @@ export default function LecturerAssignmentsPage() {
         a.courseCode.toLowerCase().includes(searchTerm.toLowerCase()))
   )
 
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === '/' && document.activeElement !== searchRef.current) {
+        e.preventDefault()
+        searchRef.current?.focus()
+      }
+      if (e.key.toLowerCase() === 'n') setShowCreateModal(true)
+      if (e.key === 'Escape') setShowCreateModal(false)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
+
   return (
     <div className="container-fluid">
       <div className="d-flex justify-content-between align-items-center mb-4">
@@ -46,19 +61,19 @@ export default function LecturerAssignmentsPage() {
           <h1 className="h3 mb-1">Manage Assignments</h1>
           <p className="text-muted mb-0">Create and manage course assignments</p>
         </div>
-        <button onClick={() => setShowCreateModal(true)} className="btn btn-primary d-flex align-items-center">
+        <button aria-label="Create assignment" onClick={() => setShowCreateModal(true)} className="btn btn-primary d-flex align-items-center">
           <Plus size={18} className="me-2" /> Create Assignment
         </button>
       </div>
 
       {/* Search and Filter */}
-      <div className="card mb-4">
+      <div className="card mb-4 shadow-sm border-0">
         <div className="card-body">
           <div className="row g-3">
             <div className="col-md-8">
               <div className="input-group">
                 <span className="input-group-text bg-white"><Search size={18} /></span>
-                <input type="text" placeholder="Search assignments..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="form-control" />
+                <input ref={searchRef} aria-label="Search assignments" type="text" placeholder="Search assignments..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="form-control form-control-lg" />
               </div>
             </div>
             <div className="col-md-4">
@@ -74,9 +89,9 @@ export default function LecturerAssignmentsPage() {
       </div>
 
       {/* Assignments Table */}
-      <div className="card mb-4">
+      <div className="card mb-4 border-0 shadow-sm">
         <div className="table-responsive">
-          <table className="table table-hover mb-0 align-middle">
+          <table className="table table-hover mb-0 align-middle table-theme">
             <thead className="table-light">
               <tr>
                 <th>Title</th>
@@ -109,10 +124,10 @@ export default function LecturerAssignmentsPage() {
                     <div className="small text-muted">{assignment.graded} graded</div>
                   </td>
                   <td className="text-center">
-                    <div className="btn-group" role="group">
-                      <button className="btn btn-sm btn-outline-primary" title="View"><Eye /></button>
-                      <button className="btn btn-sm btn-outline-success" title="Edit"><Edit /></button>
-                      <button className="btn btn-sm btn-outline-danger" title="Delete"><Trash2 /></button>
+                    <div className="btn-group" role="group" aria-label={`Actions for ${assignment.title}`}>
+                      <button className="btn btn-sm btn-outline-primary" title="View" aria-label={`View ${assignment.title}`}><Eye /></button>
+                      <button className="btn btn-sm btn-outline-success" title="Edit" aria-label={`Edit ${assignment.title}`}><Edit /></button>
+                      <button className="btn btn-sm btn-outline-danger" title="Delete" aria-label={`Delete ${assignment.title}`}><Trash2 /></button>
                     </div>
                   </td>
                 </tr>
@@ -126,6 +141,17 @@ export default function LecturerAssignmentsPage() {
       <div className="row g-3">
         <div className="col-md-4">
           <div className="card p-3">
+            {/* Create modal (lightweight) */}
+            <Modal open={showCreateModal} onClose={() => setShowCreateModal(false)} title="Create Assignment">
+              <div className="mb-2">
+                <input className="form-control mb-2" placeholder="Title" />
+                <textarea className="form-control" placeholder="Short description" />
+              </div>
+              <div className="d-flex justify-content-end gap-2 mt-3">
+                <button className="btn btn-outline-secondary" onClick={() => setShowCreateModal(false)}>Cancel</button>
+                <button className="btn btn-primary" onClick={() => { setShowCreateModal(false); /* no-op for demo */ }}>Create</button>
+              </div>
+            </Modal>
             <div className="small text-muted">Total Assignments</div>
             <div className="h4 mt-2">{filteredAssignments.length}</div>
           </div>

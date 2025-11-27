@@ -1,15 +1,26 @@
 'use client'
 
-import React, { useState } from 'react'
+export const dynamic = 'force-dynamic'
+
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { BookOpen, Mail, Lock, LogIn, AlertCircle } from 'lucide-react'
-import { useSearchParams, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import useAuth from '@/lib/useAuth'
 
 export default function LoginPage() {
-  const searchParams = useSearchParams()
   const router = useRouter()
-  const role = searchParams.get('role') || 'student'
+  const [role, setRole] = useState('student')
+
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search)
+      setRole(params.get('role') || 'student')
+    } catch (err) {
+      // fallback
+      setRole('student')
+    }
+  }, [])
 
   const { login } = useAuth()
 
@@ -170,6 +181,11 @@ export default function LoginPage() {
             <Link href={`/auth/login?role=${role === 'student' ? 'lecturer' : 'student'}`} className="text-primary fw-semibold">
               Sign in as {role === 'student' ? 'Lecturer' : 'Student'}
             </Link>
+          </div>
+
+          {/* Register Link */}
+          <div className="text-center mt-2">
+            <Link href="/auth/register" className="text-primary small fw-semibold">Create an account</Link>
           </div>
 
           {/* Back to Home */}

@@ -7,10 +7,10 @@ export async function POST(req: Request) {
   }
 
   try {
-    const bcrypt = await import('bcrypt')
-    const jwt = await import('jsonwebtoken')
-    const knexModule = await import('../../../../server/db')
-    const db = knexModule.db
+    const bcrypt = await import('bcryptjs')
+    const jwt: any = await import('jsonwebtoken')
+    const knexModule = await import('../../../../../server/db')
+    const db = knexModule.getDb()
 
     const user = await db('students').where({ email }).first()
     if (!user) return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })

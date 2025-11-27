@@ -1,6 +1,7 @@
 'use client'
 
-import React from 'react'
+import React, { useState, useRef, useEffect } from 'react'
+import Modal from '@/components/Modal'
 
 export default function StudentGroupsPage() {
   const groups = [
@@ -24,6 +25,22 @@ export default function StudentGroupsPage() {
     },
   ]
 
+  const [showCreateModal, setShowCreateModal] = useState(false)
+  const createRef = useRef<HTMLButtonElement | null>(null)
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === '/' && document.activeElement !== createRef.current) {
+        e.preventDefault()
+        createRef.current?.focus()
+      }
+      if (e.key.toLowerCase() === 'n') setShowCreateModal(true)
+      if (e.key === 'Escape') setShowCreateModal(false)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
+
   return (
     <div className="container-fluid">
       <div className="mb-3">
@@ -34,7 +51,7 @@ export default function StudentGroupsPage() {
       <div className="row g-3">
         {groups.map((group) => (
           <div key={group.id} className="col-12 col-md-6 col-lg-4">
-            <div className="card h-100">
+            <div className="card h-100 assignment-card shadow-sm border-0">
               <div className="card-body d-flex flex-column">
                 <div className="mb-3">
                   <h5 className="card-title mb-1">{group.name}</h5>
@@ -53,7 +70,7 @@ export default function StudentGroupsPage() {
 
                 <div className="mt-auto d-flex justify-content-between align-items-center">
                   <span className="badge bg-success text-capitalize">{group.status}</span>
-                  <button className="btn btn-link p-0">View Details →</button>
+                  <button aria-label={`View details for ${group.name}`} className="btn btn-link p-0">View Details →</button>
                 </div>
               </div>
             </div>
@@ -62,11 +79,22 @@ export default function StudentGroupsPage() {
       </div>
 
       {groups.length === 0 && (
-        <div className="text-center py-5 bg-light rounded">
+          <div className="text-center py-5 bg-light rounded">
           <p className="text-muted mb-4">No groups yet</p>
-          <button className="btn btn-primary">Create or Join a Group →</button>
+          <button ref={createRef} aria-label="Create or join a group" onClick={() => setShowCreateModal(true)} className="btn btn-primary">Create or Join a Group →</button>
         </div>
       )}
+
+      <Modal open={showCreateModal} onClose={() => setShowCreateModal(false)} title="Create or Join Group">
+        <div>
+          <input className="form-control mb-2" placeholder="Group name" />
+          <input className="form-control mb-2" placeholder="Invitation code (optional)" />
+        </div>
+        <div className="d-flex justify-content-end gap-2 mt-3">
+          <button className="btn btn-outline-secondary" onClick={() => setShowCreateModal(false)}>Cancel</button>
+          <button className="btn btn-primary" onClick={() => { setShowCreateModal(false); }}>Create / Join</button>
+        </div>
+      </Modal>
     </div>
   )
 }

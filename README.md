@@ -253,3 +253,41 @@ For support and questions, please contact the development team or create an issu
 ---
 
 **StudyHub** - Making academic collaboration seamless and efficient! 🎓
+
+## 🗄️ Database management (DB helpers)
+
+This repository includes cross-platform helper scripts to manage development databases (supports sqlite3 for local dev and mysql2 for MySQL/XAMPP).
+
+Add database config in `server/.env` (or in the root `.env`), for example:
+
+```
+# switch DB client to mysql2 or sqlite3
+DB_CLIENT=mysql2
+MYSQL_HOST=localhost
+MYSQL_PORT=3306
+MYSQL_USER=root
+MYSQL_PASSWORD=your_password
+MYSQL_DATABASE=assignment_dev
+```
+
+Helper scripts (run from project root):
+
+```powershell
+npm run db:create   # create the database (for MySQL) or touch sqlite file
+npm run db:migrate  # run knex migrations
+npm run db:seed     # seed demo users + run migrations
+npm run db:drop     # drop database (for MySQL) or delete sqlite file
+
+Convenience helpers (shorthand):
+
+```powershell
+npm run db:setup    # create -> migrate -> seed
+npm run db:reset    # drop -> create -> migrate -> seed (clean start)
+```
+```
+
+Notes:
+- Scripts load `server/.env` by default so you can keep DB credentials out of repo root.
+- `DB_CLIENT=sqlite3` is the safest local default (no external MySQL required).
+- Use `DB_CLIENT=mysql2` if you want to use XAMPP / a MySQL instance.
+

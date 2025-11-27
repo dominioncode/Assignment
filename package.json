@@ -7,7 +7,18 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:create": "node ./scripts/db_create.js",
+    "db:drop": "node ./scripts/db_drop.js",
+    "db:migrate": "node ./scripts/db_migrate.js",
+    "db:seed": "node ./scripts/db_seed.js",
+    "db:setup": "node ./scripts/db_setup.js",
+    "db:reset": "node ./scripts/db_reset.js",
+    "db:init": "node ./scripts/db_init.js"
+    ,
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:report": "playwright show-report"
   },
   "keywords": [
     "assignment",
@@ -22,20 +33,30 @@
     "@types/node": "^20.0.0",
     "@types/react": "^18.2.0",
     "autoprefixer": "^10.4.14",
+    "bcryptjs": "^2.4.3",
     "bootstrap": "^5.3.8",
     "date-fns": "^2.30.0",
+    "dotenv": "^17.2.3",
+    "jsonwebtoken": "^9.0.2",
+    "knex": "^2.5.1",
     "lucide-react": "^0.263.1",
+    "mysql2": "^3.9.7",
     "next": "^14.0.0",
     "postcss": "^8.4.31",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.1",
+    "sqlite3": "^5.1.7",
     "tailwindcss": "^3.3.0",
     "typescript": "^5.2.0",
     "zustand": "^4.4.0"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "@types/jsonwebtoken": "^9.0.2",
     "eslint": "^8.50.0",
-    "eslint-config-next": "^14.0.0"
+    "eslint-config-next": "^14.0.0",
+    "@playwright/test": "^1.43.0",
+    "@axe-core/playwright": "^4.7.0"
   }
 }

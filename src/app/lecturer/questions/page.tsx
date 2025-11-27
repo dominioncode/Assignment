@@ -1,5 +1,7 @@
 'use client'
 
+export const dynamic = 'force-dynamic'
+
 import { useState } from 'react'
 import { useAppStore } from '@/lib/store'
 import { Question, QuestionType } from '@/lib/types'
@@ -295,7 +297,7 @@ export default function LecturerQuestionsPage() {
               ))
             ) : (
               <div className="col-12">
-                <div className="alert alert-info">No questions yet. Click "Add Question" to create one.</div>
+                <div className="alert alert-info">No questions yet. Click &quot;Add Question&quot; to create one.</div>
               </div>
             )
           ) : (

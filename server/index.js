@@ -37,7 +37,8 @@ app.post('/register', async (req, res) => {
     res.status(201).json({ id })
   } catch (err) {
     console.error(err)
-    if (err && err.code === 'SQLITE_CONSTRAINT') {
+    // Handle duplicate email errors for both SQLite and MySQL
+    if (err && (err.code === 'SQLITE_CONSTRAINT' || err.code === 'ER_DUP_ENTRY')) {
       return res.status(409).json({ error: 'Email already exists' })
     }
     res.status(500).json({ error: 'Internal server error' })

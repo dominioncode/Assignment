@@ -14,7 +14,12 @@ interface AdminCardProps {
 
 export default function AdminCard({ title, subtitle, badge, className = '', children, footer, onClick }: AdminCardProps) {
   return (
-    <div className={`card ${className}`} onClick={onClick} role={onClick ? 'button' : undefined}>
+    <div
+      className={`card ${className} shadow-sm border-0`}
+      onClick={onClick}
+      role={onClick ? 'button' : undefined}
+      style={{ cursor: onClick ? 'pointer' : undefined }}
+    >
       {(title || subtitle || badge) && (
         <div className="card-header d-flex justify-content-between align-items-start">
           <div>
@@ -24,7 +29,7 @@ export default function AdminCard({ title, subtitle, badge, className = '', chil
           {badge && <div>{badge}</div>}
         </div>
       )}
-      <div className="card-body">{children}</div>
+      <div className="card-body py-3">{children}</div>
       {footer && <div className="card-footer">{footer}</div>}
     </div>
   )

@@ -1,11 +1,15 @@
 'use client'
 
 import React from 'react'
+import { useRef, useEffect, useState } from 'react'
 import { Upload, Search, Filter } from 'lucide-react'
+import Modal from '@/components/Modal'
 
 export default function LecturerMaterialsPage() {
   const [searchTerm, setSearchTerm] = React.useState('')
   const [filterCourse, setFilterCourse] = React.useState('all')
+  const [showUploadModal, setShowUploadModal] = useState(false)
+  const searchRef = useRef<HTMLInputElement | null>(null)
 
   const materials = [
     {
@@ -28,6 +32,20 @@ export default function LecturerMaterialsPage() {
     },
   ]
 
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === '/' && document.activeElement !== searchRef.current) {
+        e.preventDefault();
+        searchRef.current?.focus();
+      }
+      if (e.key.toLowerCase() === 'n') setShowUploadModal(true)
+      if (e.key === 'Escape') setShowUploadModal(false)
+    }
+
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
+
   return (
     <div className="container-fluid">
       <div className="d-flex justify-content-between align-items-center mb-4">
@@ -35,7 +53,7 @@ export default function LecturerMaterialsPage() {
           <h1 className="h3 mb-1">Study Materials</h1>
           <p className="text-muted mb-0">Upload and manage course materials</p>
         </div>
-        <button className="btn btn-primary d-flex align-items-center"><Upload size={18} className="me-2" /> Upload Material</button>
+        <button aria-label="Upload material" onClick={() => setShowUploadModal(true)} className="btn btn-primary d-flex align-items-center"><Upload size={18} className="me-2" /> Upload Material</button>
       </div>
 
       {/* Search and Filter */}
@@ -45,7 +63,7 @@ export default function LecturerMaterialsPage() {
             <div className="col-md-8">
               <div className="input-group">
                 <span className="input-group-text bg-white"><Search size={18} /></span>
-                <input type="text" placeholder="Search materials..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="form-control" />
+                <input ref={searchRef} aria-label="Search materials" type="text" placeholder="Search materials..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="form-control" />
               </div>
             </div>
             <div className="col-md-4">
@@ -60,9 +78,9 @@ export default function LecturerMaterialsPage() {
       </div>
 
       {/* Materials Table */}
-      <div className="card">
+      <div className="card border-0 shadow-sm">
         <div className="table-responsive">
-          <table className="table table-hover mb-0 align-middle">
+          <table className="table table-hover mb-0 align-middle table-theme">
             <thead className="table-light">
               <tr>
                 <th>Title</th>
@@ -89,6 +107,17 @@ export default function LecturerMaterialsPage() {
           </table>
         </div>
       </div>
+      <Modal open={showUploadModal} onClose={() => setShowUploadModal(false)} title="Upload Material">
+        <div>
+          <input className="form-control mb-2" placeholder="Title" />
+          <select className="form-select mb-2"><option>CS101</option></select>
+          <input type="file" className="form-control" />
+        </div>
+        <div className="d-flex justify-content-end gap-2 mt-3">
+          <button className="btn btn-outline-secondary" onClick={() => setShowUploadModal(false)}>Cancel</button>
+          <button className="btn btn-primary" onClick={() => { setShowUploadModal(false); }}>Upload</button>
+        </div>
+      </Modal>
     </div>
   )
 }

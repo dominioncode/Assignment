@@ -12,3 +12,10 @@ yarn-error.log*
 .idea/
 dist/
 build/
+# Local environment and generated artifacts
+.env
+.env.example
+*.bundle
+*.sqlite3
+test-results/
+tsconfig.tsbuildinfo

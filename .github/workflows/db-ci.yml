@@ -47,18 +47,21 @@ jobs:
           echo 'Starting MySQL container for CI'
           docker pull mysql:8.0
           docker run --name ci_mysql -e MYSQL_ROOT_PASSWORD=example -e MYSQL_DATABASE=ci_assignment -p 3306:3306 -d mysql:8.0
-          # wait until mysql is accepting connections (timeout ~60s)
+          # wait until mysql is accepting connections (timeout ~120s)
           retries=0
-          until docker exec ci_mysql mysqladmin ping -pexample >/dev/null 2>&1 || [ $retries -ge 30 ]; do
+          max_retries=60
+          until docker exec ci_mysql mysqladmin ping -pexample >/dev/null 2>&1 || [ $retries -ge $max_retries ]; do
             retries=$((retries + 1))
-            echo "waiting for mysql ($retries)..."
+            echo "waiting for mysql ($retries/$max_retries)..."
             sleep 2
           done
-          if [ $retries -ge 30 ]; then
+          if [ $retries -ge $max_retries ]; then
             echo "MySQL did not become ready in time" >&2
             docker logs ci_mysql || true
+            docker exec ci_mysql mysqladmin ping -pexample 2>&1 || true
             exit 1
           fi
+          echo "MySQL is ready after $retries checks"
 
       - name: Create DB
         run: npm run db:create

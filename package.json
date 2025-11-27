@@ -21,6 +21,7 @@
     "test:e2e:report": "playwright show-report"
     ,
     "test:unit": "vitest run src/components/__tests__ --environment jsdom --reporter=dot",
+    "pr:create": "node ./scripts/create_pr.js",
     "test:unit:watch": "vitest"
   },
   "keywords": [

@@ -36,6 +36,18 @@ jobs:
           name: playwright-report
           path: playwright-report
 
+      - name: Convert axe JSON -> HTML for review
+        if: always()
+        run: |
+          node ./scripts/convert_axe_reports.js || true
+
+      - name: Upload axe HTML artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: axe-html
+          path: playwright-report/axe-html
+
       - name: Show Playwright report (optional)
         if: always()
         run: npx playwright show-report || true

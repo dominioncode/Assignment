@@ -41,12 +41,24 @@ jobs:
           DATABASE_FILE=./server/dev.sqlite3
           EOF
 
-      - name: Start MySQL service
+      - name: Start MySQL service (docker)
         if: matrix.db == 'mysql2'
-        uses: mysql-actions/mysql-service@v1
-        with:
-          mysql version: '8.0'
-          mysql root password: 'example'
+        run: |
+          echo 'Starting MySQL container for CI'
+          docker pull mysql:8.0
+          docker run --name ci_mysql -e MYSQL_ROOT_PASSWORD=example -e MYSQL_DATABASE=ci_assignment -p 3306:3306 -d mysql:8.0
+          # wait until mysql is accepting connections (timeout ~60s)
+          retries=0
+          until docker exec ci_mysql mysqladmin ping -pexample >/dev/null 2>&1 || [ $retries -ge 30 ]; do
+            retries=$((retries + 1))
+            echo "waiting for mysql ($retries)..."
+            sleep 2
+          done
+          if [ $retries -ge 30 ]; then
+            echo "MySQL did not become ready in time" >&2
+            docker logs ci_mysql || true
+            exit 1
+          fi
 
       - name: Create DB
         run: npm run db:create

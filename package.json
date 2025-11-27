@@ -19,6 +19,9 @@
     "test:e2e": "playwright test",
     "test:e2e:headed": "playwright test --headed",
     "test:e2e:report": "playwright show-report"
+    ,
+    "test:unit": "vitest run src/components/__tests__ --environment jsdom --reporter=dot",
+    "test:unit:watch": "vitest"
   },
   "keywords": [
     "assignment",
@@ -57,6 +60,11 @@
     "eslint": "^8.50.0",
     "eslint-config-next": "^14.0.0",
     "@playwright/test": "^1.43.0",
-    "@axe-core/playwright": "^4.7.0"
+    "@axe-core/playwright": "^4.7.0",
+    "vitest": "^0.34.1",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.4.3",
+    "@testing-library/jest-dom": "^6.0.0",
+    "jsdom": "^22.0.0"
   }
 }

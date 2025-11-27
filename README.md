@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # StudyHub - Assignment & Study Management System
 
 A comprehensive platform for students and lecturers to manage assignments, coordinate group work, track academic results, and share study materials efficiently.
@@ -5,27 +6,11 @@ A comprehensive platform for students and lecturers to manage assignments, coord
 ## 🎯 Features
 
 ### For Students
-- **📋 View Assignments**: Browse all course assignments with detailed information
-- **👥 Group Management**: Form and participate in group projects
-- **📊 Track Results**: View grades and results semester by semester
-- **📚 Study Materials**: Access course materials and resources
-- **🔔 Notifications**: Real-time updates on assignments and submissions
 
 ### For Lecturers
-- **✍️ Create Assignments**: Set individual, group, and study assignments
-- **👫 Group Coordination**: Organize student groups for projects
-- **📝 Grading System**: Review and grade submissions with feedback
-- **📤 Material Sharing**: Upload and manage study resources
-- **📈 Progress Tracking**: Monitor student submissions and performance
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: React 18 with Next.js 14
-- **Styling**: Tailwind CSS
-- **State Management**: Zustand
-- **Icons**: Lucide React
-- **Utilities**: date-fns
-- **Language**: TypeScript
 
 ## 📁 Project Structure
 
@@ -63,8 +48,6 @@ public/                          # Static assets
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js 18+ and npm/yarn
-- A modern web browser
 
 ### Installation
 
@@ -113,66 +96,31 @@ public/                          # Static assets
 ## 🎨 User Interface
 
 ### Dashboard Features
-- **Sidebar Navigation**: Easy access to all main features
-- **Top Bar**: User profile, notifications, and logout
-- **Responsive Design**: Works on desktop, tablet, and mobile
-- **Dark/Light Mode**: Customizable theme (future enhancement)
 
 ### Key Pages
 
 #### Home Page (`/`)
-- Role selection (Student/Lecturer)
-- Feature highlights
-- Quick access to login
 
 #### Login Page (`/auth/login`)
-- Email and password authentication
-- Role-based login
-- Demo credentials option
-- Remember me functionality
 
 #### Student Dashboard
-- Assignment list with filtering
-- Group membership view
-- Semester-based result tracking
-- Study material library
 
 #### Lecturer Dashboard
-- Assignment management
-- Submission tracking
-- Student group organization
-- Result publishing interface
 
 ## 📊 Data Models
 
 ### User
-- Student: ID, name, email, department, studentId
-- Lecturer: ID, name, email, department, employeeId
 
 ### Assignment
-- Title, description, type (individual/group/study)
-- Due date, total marks, course reference
-- Instructions, attachments
 
 ### Submission
-- Assignment reference, student/group reference
-- Submission date, files, status
-- Marks, feedback, reviewer
 
 ### SemesterResult
-- Student ID, semester, year
-- Course information, marks, grade
 
 ### Group
-- Name, assignment reference
-- Members list, creation date
 
 ## 🔒 Security Features
 
-- Role-based access control (RBAC)
-- User authentication
-- Data validation
-- Secure file handling (to be implemented)
 
 ## 🔄 State Management with Zustand
 
@@ -188,23 +136,9 @@ const addAssignment = useAppStore((state) => state.addAssignment)
 
 ## 📱 Responsive Design
 
-- Mobile-first approach
-- Tailwind CSS breakpoints
-- Touch-friendly UI elements
-- Optimized for all screen sizes
 
 ## 🎯 Future Enhancements
 
-- [ ] Real-time notifications with WebSocket
-- [ ] Advanced grading rubrics
-- [ ] Student-Lecturer messaging
-- [ ] Calendar integration
-- [ ] Analytics and reporting
-- [ ] Mobile app (React Native)
-- [ ] Integration with LMS platforms
-- [ ] Plagiarism detection
-- [ ] Video submission support
-- [ ] Achievement badges
 
 ## 🔧 Configuration
 
@@ -222,11 +156,6 @@ colors: {
 ```
 
 ### API Integration Points (Future)
-- Authentication service
-- Assignment CRUD operations
-- Submission handling
-- Result generation
-- File upload service
 
 ## 📝 Contributing
 
@@ -245,12 +174,7 @@ For support and questions, please contact the development team or create an issu
 
 ## 🙏 Acknowledgments
 
-- Next.js team for the amazing framework
-- React community for extensive libraries
-- Tailwind CSS for styling utilities
-- Lucide for beautiful icons
 
----
 
 **StudyHub** - Making academic collaboration seamless and efficient! 🎓
 
@@ -286,8 +210,9 @@ npm run db:reset    # drop -> create -> migrate -> seed (clean start)
 ```
 ```
 
-Notes:
-- Scripts load `server/.env` by default so you can keep DB credentials out of repo root.
-- `DB_CLIENT=sqlite3` is the safest local default (no external MySQL required).
 - Use `DB_CLIENT=mysql2` if you want to use XAMPP / a MySQL instance.
 
+=======
+# Assignment
+To help students ease off the stress of bulky assignments
+>>>>>>> origin/main

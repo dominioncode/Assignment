@@ -62,6 +62,22 @@ jobs:
             exit 1
           fi
           echo "MySQL is ready after $retries checks"
+          # give the server a small grace period for final initialization, then run a lightweight SQL check
+          echo "Pausing briefly to allow MySQL background initialization to settle..."
+          sleep 5
+          check_retries=0
+          check_max=5
+          until docker exec ci_mysql mysql -uroot -pexample -e "SELECT 1" >/dev/null 2>&1 || [ $check_retries -ge $check_max ]; do
+            check_retries=$((check_retries + 1))
+            echo "post-start healthcheck attempt $check_retries/$check_max..."
+            sleep 2
+          done
+          if [ $check_retries -ge $check_max ]; then
+            echo "Post-start SQL health-check failed" >&2
+            docker logs ci_mysql || true
+            docker exec ci_mysql mysql -uroot -pexample -e "SHOW PROCESSLIST" 2>&1 || true
+            exit 1
+          fi
 
       - name: Create DB
         run: npm run db:create

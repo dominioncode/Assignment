@@ -1,2 +1,218 @@
+<<<<<<< HEAD
+# StudyHub - Assignment & Study Management System
+
+A comprehensive platform for students and lecturers to manage assignments, coordinate group work, track academic results, and share study materials efficiently.
+
+## 🎯 Features
+
+### For Students
+
+### For Lecturers
+
+## 🛠️ Tech Stack
+
+
+## 📁 Project Structure
+
+```
+src/
+├── app/                          # Next.js App Router
+│   ├── layout.tsx               # Root layout
+│   ├── page.tsx                 # Home page
+│   ├── auth/
+│   │   └── login/page.tsx       # Login page
+│   ├── student/
+│   │   ├── assignments/page.tsx # Student assignments
+│   │   ├── groups/page.tsx      # Student groups
+│   │   ├── materials/page.tsx   # Study materials
+│   │   └── results/page.tsx     # Semester results
+│   └── lecturer/
+│       ├── assignments/page.tsx # Manage assignments
+│       ├── groups/page.tsx      # Manage groups
+│       ├── materials/page.tsx   # Upload materials
+│       └── results/page.tsx     # View results
+├── components/
+│   ├── DashboardLayout.tsx      # Main dashboard layout
+│   ├── AssignmentCard.tsx       # Assignment card component
+│   └── ...                      # Other components
+├── lib/
+│   ├── types.ts                 # TypeScript types and interfaces
+│   ├── store.ts                 # Zustand state management
+│   └── utils.ts                 # Utility functions
+└── styles/
+    └── globals.css              # Global styles
+
+public/                          # Static assets
+```
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd projectwork2
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Configure environment variables** (if needed)
+   Create a `.env.local` file in the root directory
+
+4. **Run the development server**
+   ```bash
+   npm run dev
+   ```
+
+5. **Open your browser**
+   Navigate to `http://localhost:3000`
+
+## 📖 Usage Guide
+
+### For Students
+
+1. **Login**: Use your student credentials to access the platform
+2. **View Assignments**: Navigate to "My Assignments" to see all your course tasks
+3. **Submit Work**: Click on an assignment to submit your work before the deadline
+4. **Join Groups**: Go to "My Groups" to join or create study groups
+5. **Check Results**: View your semester results in the "My Results" section
+6. **Download Materials**: Access study resources in "Study Materials"
+
+### For Lecturers
+
+1. **Login**: Use your lecturer credentials
+2. **Create Assignment**: Click "Create Assignment" to add new tasks
+3. **Manage Groups**: Organize student groups for collaborative work
+4. **Grade Submissions**: Review student submissions and provide feedback
+5. **Upload Materials**: Share course resources and study materials
+6. **Track Progress**: Monitor student performance and submission rates
+
+## 🎨 User Interface
+
+### Dashboard Features
+
+### Key Pages
+
+#### Home Page (`/`)
+
+#### Login Page (`/auth/login`)
+
+#### Student Dashboard
+
+#### Lecturer Dashboard
+
+## 📊 Data Models
+
+### User
+
+### Assignment
+
+### Submission
+
+### SemesterResult
+
+### Group
+
+## 🔒 Security Features
+
+
+## 🔄 State Management with Zustand
+
+The app uses Zustand for global state management:
+
+```typescript
+// Example: Access current user
+const currentUser = useAppStore((state) => state.currentUser)
+
+// Example: Add assignment
+const addAssignment = useAppStore((state) => state.addAssignment)
+```
+
+## 📱 Responsive Design
+
+
+## 🎯 Future Enhancements
+
+
+## 🔧 Configuration
+
+### Tailwind CSS Colors
+```javascript
+colors: {
+  primary: '#3B82F6',      // Blue
+  secondary: '#1E40AF',    // Dark Blue
+  success: '#10B981',      // Green
+  danger: '#EF4444',       // Red
+  warning: '#F59E0B',      // Orange
+  dark: '#1F2937',         // Dark Gray
+  light: '#F3F4F6',        // Light Gray
+}
+```
+
+### API Integration Points (Future)
+
+## 📝 Contributing
+
+1. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+2. Commit your changes (`git commit -m 'Add AmazingFeature'`)
+3. Push to the branch (`git push origin feature/AmazingFeature`)
+4. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+## 📞 Support
+
+For support and questions, please contact the development team or create an issue in the repository.
+
+## 🙏 Acknowledgments
+
+
+
+**StudyHub** - Making academic collaboration seamless and efficient! 🎓
+
+## 🗄️ Database management (DB helpers)
+
+This repository includes cross-platform helper scripts to manage development databases (supports sqlite3 for local dev and mysql2 for MySQL/XAMPP).
+
+Add database config in `server/.env` (or in the root `.env`), for example:
+
+```
+# switch DB client to mysql2 or sqlite3
+DB_CLIENT=mysql2
+MYSQL_HOST=localhost
+MYSQL_PORT=3306
+MYSQL_USER=root
+MYSQL_PASSWORD=your_password
+MYSQL_DATABASE=assignment_dev
+```
+
+Helper scripts (run from project root):
+
+```powershell
+npm run db:create   # create the database (for MySQL) or touch sqlite file
+npm run db:migrate  # run knex migrations
+npm run db:seed     # seed demo users + run migrations
+npm run db:drop     # drop database (for MySQL) or delete sqlite file
+
+Convenience helpers (shorthand):
+
+```powershell
+npm run db:setup    # create -> migrate -> seed
+npm run db:reset    # drop -> create -> migrate -> seed (clean start)
+```
+```
+
+- Use `DB_CLIENT=mysql2` if you want to use XAMPP / a MySQL instance.
+
+=======
 # Assignment
 To help students ease off the stress of bulky assignments
+>>>>>>> origin/main

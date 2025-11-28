@@ -1,0 +1,59 @@
+name: Auto-create PR for bootstrap-admin-redesign
+
+on:
+  workflow_dispatch: {}
+  push:
+    branches:
+      - 'bootstrap-admin-redesign'
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Read PR body file
+        id: read_body
+        run: |
+          if [ -f docs/pr-ui-polish.md ]; then
+            echo "PR_BODY<<EOF" >> $GITHUB_OUTPUT
+            cat docs/pr-ui-polish.md >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          else
+            echo "PR_BODY=" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create PR if missing
+        uses: actions/github-script@v6
+        env:
+          PR_BODY: ${{ steps.read_body.outputs.PR_BODY }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const owner = context.repo.owner
+            const repo = context.repo.repo
+            const head = 'bootstrap-admin-redesign'
+            const base = 'main'
+            const title = 'UI polish + E2E accessibility + CI improvements'
+
+            // Check for existing open PRs from head->base
+            const list = await github.rest.pulls.list({ owner, repo, head: `${owner}:${head}`, base, state: 'open' })
+            if (list.data && list.data.length > 0) {
+              console.log('Found existing open PR: ' + list.data[0].html_url)
+            } else {
+              // create PR
+              let body = ''
+              try {
+                body = process.env.PR_BODY || ''
+              } catch (e) {
+                body = ''
+              }
+
+              const create = await github.rest.pulls.create({ owner, repo, head, base, title, body })
+              console.log('PR created: ' + create.data.html_url)
+            }

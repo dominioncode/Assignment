@@ -1,0 +1,98 @@
+name: DB CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  migrate-and-seed:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        db: [sqlite3, mysql2]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Configure DB env
+        if: matrix.db == 'mysql2'
+        run: |
+          cat > server/.env << 'EOF'
+          MYSQL_HOST=127.0.0.1
+          MYSQL_PORT=3306
+          MYSQL_USER=root
+          MYSQL_PASSWORD=example
+          MYSQL_DATABASE=ci_assignment
+          DB_CLIENT=mysql2
+          EOF
+
+      - name: Configure DB env (sqlite)
+        if: matrix.db == 'sqlite3'
+        run: |
+          cat > server/.env << 'EOF'
+          DB_CLIENT=sqlite3
+          DATABASE_FILE=./server/dev.sqlite3
+          EOF
+
+      - name: Start MySQL service (docker)
+        if: matrix.db == 'mysql2'
+        run: |
+          echo 'Starting MySQL container for CI'
+          docker pull mysql:8.0
+          docker run --name ci_mysql -e MYSQL_ROOT_PASSWORD=example -e MYSQL_DATABASE=ci_assignment -p 3306:3306 -d mysql:8.0
+          # wait until mysql is accepting connections (timeout ~120s)
+          retries=0
+          max_retries=60
+          until docker exec ci_mysql mysqladmin ping -pexample >/dev/null 2>&1 || [ $retries -ge $max_retries ]; do
+            retries=$((retries + 1))
+            echo "waiting for mysql ($retries/$max_retries)..."
+            sleep 2
+          done
+          if [ $retries -ge $max_retries ]; then
+            echo "MySQL did not become ready in time" >&2
+            docker logs ci_mysql || true
+            docker exec ci_mysql mysqladmin ping -pexample 2>&1 || true
+            exit 1
+          fi
+          echo "MySQL is ready after $retries checks"
+          # give the server a small grace period for final initialization, then run a lightweight SQL check
+          echo "Pausing briefly to allow MySQL background initialization to settle..."
+          sleep 5
+          check_retries=0
+          check_max=5
+          until docker exec ci_mysql mysql -uroot -pexample -e "SELECT 1" >/dev/null 2>&1 || [ $check_retries -ge $check_max ]; do
+            check_retries=$((check_retries + 1))
+            echo "post-start healthcheck attempt $check_retries/$check_max..."
+            sleep 2
+          done
+          if [ $check_retries -ge $check_max ]; then
+            echo "Post-start SQL health-check failed" >&2
+            docker logs ci_mysql || true
+            docker exec ci_mysql mysql -uroot -pexample -e "SHOW PROCESSLIST" 2>&1 || true
+            exit 1
+          fi
+
+      - name: Create DB
+        run: npm run db:create
+
+      - name: Run migrations
+        run: npm run db:migrate
+
+      - name: Run seeds
+        run: npm run db:seed
+
+      - name: Quick DB smoke test
+        run: node ./scripts/test_mysql_insert.js
+        env:
+          NODE_ENV: test
+
+      - name: List students table
+        run: |
+          node -e "(async ()=>{ const serverDb=require('./server/db'); await serverDb.migrate(); const db = serverDb.getDb(); const rows = await db('students').select('*').limit(3); console.log('students sample:', rows); process.exit(0) })()"

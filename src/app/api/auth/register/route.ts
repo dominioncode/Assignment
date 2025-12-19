@@ -7,12 +7,26 @@ export async function POST(req: Request) {
   }
 
   try {
-    const bcrypt = await import('bcryptjs')
+    const bcryptModule = await import('bcryptjs')
+    const bcrypt = bcryptModule.default || bcryptModule
     const knexModule = await import('../../../../../server/db')
     const db = knexModule.getDb()
     const BCRYPT_SALT_ROUNDS = parseInt(process.env.BCRYPT_SALT_ROUNDS || '10', 10)
 
     const hashedPassword = await bcrypt.hash(password, BCRYPT_SALT_ROUNDS)
+    // If role is lecturer, insert into `lecturers` table
+    if (role === 'lecturer') {
+      const [id] = await db('lecturers').insert({
+        email,
+        password_hash: hashedPassword,
+        name,
+        department: null,
+        title: null,
+        created_by: null,
+      })
+      return NextResponse.json({ id, role: 'lecturer' }, { status: 201 })
+    }
+
     const [id] = await db('students').insert({
       email,
       password_hash: hashedPassword,
@@ -21,7 +35,7 @@ export async function POST(req: Request) {
       role: role || 'student',
     })
 
-    return NextResponse.json({ id }, { status: 201 })
+    return NextResponse.json({ id, role: role || 'student' }, { status: 201 })
   } catch (err: any) {
     console.error(err)
     // support both sqlite and mysql duplicate key errors

@@ -10,7 +10,7 @@ const readline = require('readline')
 
 async function confirmAndRun() {
   // safety: ask for confirmation when using a database that could be production
-  const client = process.env.DB_CLIENT || process.env.DATABASE_CLIENT || 'sqlite3'
+  const client = process.env.DB_CLIENT || process.env.DATABASE_CLIENT || 'mysql2'
   if (client === 'mysql2' || client === 'mysql') {
     const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
     const answer = await new Promise((res) => rl.question('This will DROP the MySQL database and erase data. Type "YES" to continue: ', res))

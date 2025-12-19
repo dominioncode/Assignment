@@ -95,6 +95,20 @@ html.reduce-motion .form-control {
 .btn, .nav-link { transition: transform .12s ease, opacity .12s ease }
 .btn:hover { transform: translateY(-2px) }
 
+/* Ensure our site-wide primary color is enforced (last imported stylesheet) */
+.bg-primary,
+.btn.btn-primary,
+.badge.bg-primary,
+.progress-bar.bg-primary {
+  background-color: var(--primary) !important;
+  color: #ffffff !important;
+}
+
+/* Slightly stronger placeholder and form-label rules in the final CSS */
+input.form-control::placeholder,
+textarea.form-control::placeholder { color: #374151; opacity: 1 }
+.form-label { color: #374151 }
+
 /* Mobile friendly touch sizes */
 @media (max-width: 576px){
   .btn { padding: .65rem 1.1rem }

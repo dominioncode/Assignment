@@ -42,7 +42,7 @@ export default function StudentGroupsPage() {
   }, [])
 
   return (
-    <div className="container-fluid">
+    <main className="container-fluid" role="main">
       <div className="mb-3">
         <h1 className="h3 mb-1">My Groups</h1>
         <p className="text-muted mb-0">Manage your group memberships and collaborations</p>
@@ -54,7 +54,7 @@ export default function StudentGroupsPage() {
             <div className="card h-100 assignment-card shadow-sm border-0">
               <div className="card-body d-flex flex-column">
                 <div className="mb-3">
-                  <h5 className="card-title mb-1">{group.name}</h5>
+                  <div className="card-title mb-1">{group.name}</div>
                   <div className="small text-muted">{group.assignment}</div>
                 </div>
 
@@ -64,7 +64,16 @@ export default function StudentGroupsPage() {
                     <strong className="text-dark">{group.members}/{group.maxMembers}</strong>
                   </div>
                   <div className="progress" style={{ height: 8 }}>
-                    <div className="progress-bar bg-primary" role="progressbar" style={{ width: `${(group.members / group.maxMembers) * 100}%` }} aria-valuenow={(group.members / group.maxMembers) * 100} aria-valuemin={0} aria-valuemax={100}></div>
+                    <div
+                      className="progress-bar bg-primary"
+                      role="progressbar"
+                      style={{ width: `${(group.members / group.maxMembers) * 100}%` }}
+                      aria-valuenow={(group.members / group.maxMembers) * 100}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                      aria-label={`${group.members} of ${group.maxMembers} group members`}
+                      title={`${group.members} of ${group.maxMembers} group members`}
+                    ></div>
                   </div>
                 </div>
 
@@ -87,7 +96,7 @@ export default function StudentGroupsPage() {
 
       <Modal open={showCreateModal} onClose={() => setShowCreateModal(false)} title="Create or Join Group">
         <div>
-          <input className="form-control mb-2" placeholder="Group name" />
+          <input autoFocus className="form-control mb-2" placeholder="Group name" />
           <input className="form-control mb-2" placeholder="Invitation code (optional)" />
         </div>
         <div className="d-flex justify-content-end gap-2 mt-3">
@@ -95,6 +104,6 @@ export default function StudentGroupsPage() {
           <button className="btn btn-primary" onClick={() => { setShowCreateModal(false); }}>Create / Join</button>
         </div>
       </Modal>
-    </div>
+    </main>
   )
 }

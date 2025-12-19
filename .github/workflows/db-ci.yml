@@ -88,6 +88,12 @@ jobs:
       - name: Run seeds
         run: npm run db:seed
 
+      - name: Run server tests
+        run: |
+          cd server
+          npm ci
+          npm test
+
       - name: Quick DB smoke test
         run: node ./scripts/test_mysql_insert.js
         env:

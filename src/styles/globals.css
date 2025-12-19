@@ -1,3 +1,17 @@
+.card .form-control::placeholder {
+  color: #374151 !important;
+  opacity: 1 !important;
+}
+
+.card .btn-outline-secondary {
+  border: 2px solid #6B7280 !important;
+  color: #374151 !important;
+}
+
+.card .btn-primary {
+  background-color: var(--primary) !important;
+  color: #ffffff !important;
+}
 /* Tailwind directives removed to avoid editor diagnostics when Tailwind/PostCSS is not installed.
    If you install Tailwind and PostCSS (recommended for full utility support), restore these lines:
      @tailwind base;
@@ -6,8 +20,9 @@
 */
 
 :root {
-  --primary: #3B82F6;
-  --secondary: #1E40AF;
+  /* darker primary/secondary to meet WCAG contrast with white text */
+  --primary: #1D4ED8; /* blue-700 */
+  --secondary: #1E40AF; /* keep as a strong blue-800 fallback */
   --success: #10B981;
   --danger: #EF4444;
   --warning: #F59E0B;
@@ -100,6 +115,13 @@ select {
   transition: color 0.2s, background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
 
+/* make placeholder text darker so it meets contrast thresholds */
+input::placeholder,
+textarea::placeholder {
+  color: #374151; /* gray-700 */
+  opacity: 1; /* avoid low-contrast translucency */
+}
+
 input[type='text']:focus,
 input[type='email']:focus,
 input[type='password']:focus,
@@ -119,6 +141,11 @@ textarea:disabled,
 select:disabled {
   background-color: #F3F4F6; /* tailwind bg-gray-100 */
   cursor: not-allowed;
+}
+
+/* File inputs can render gray placeholder filenames in some browsers - ensure readable text */
+input[type='file'] {
+  color: #374151; /* gray-700 for readable filename text */
 }
 
 /* Button Styles */
@@ -194,6 +221,96 @@ select:disabled {
   box-shadow: 0 0 0 4px rgba(59,130,246,0.15);
 }
 
+/* Specific outline secondary variant used in a few modals — make it accessible */
+.btn-outline-secondary {
+  border: 2px solid #6B7280; /* gray-500 */
+  color: #374151; /* gray-700 */
+  background: transparent;
+}
+.btn-outline-secondary:hover {
+  background: #F3F4F6; /* light gray hover */
+  color: #111827; /* near-black text */
+}
+
+/* Ensure primary buttons have a sufficiently dark background for white text */
+.btn-primary {
+  background-color: var(--primary);
+  color: #ffffff;
+}
+.btn-primary:hover {
+  background-color: var(--secondary);
+}
+.btn-primary:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(29,78,216,0.15);
+}
+
+/* Ensure utility bg-primary variants use our accessible color */
+.bg-primary,
+.btn.btn-primary,
+.badge.bg-primary,
+.progress-bar.bg-primary {
+  background-color: var(--primary) !important;
+  color: #ffffff !important;
+}
+
+/* Make placeholder rules more specific to overcome upstream styles in Bootstrap */
+input.form-control::placeholder,
+textarea.form-control::placeholder {
+  color: #374151; /* gray-700 */
+  /* opacity: 1; */
+}
+
+/* Form labels were low contrast in some modals — make them darker */
+.form-label {
+  color: #374151;
+}
+
+/* Modal-specific overrides to ensure accessible contrast inside dialogs */
+.modal-backdrop {
+  /* make the backdrop fully opaque so modal content is visually separated */
+  background-color: #000000 !important;
+  opacity: 0.9 !important;
+}
+.modal-backdrop .card {
+  color: #08102a !important;
+  background-color: #ffffff !important;
+  opacity: 1 !important;
+}
+.modal-backdrop .card .card-header,
+.modal-backdrop .card .card-body {
+  background-color: #ffffff !important;
+  opacity: 1 !important;
+}
+.modal-backdrop .card .card-title,
+.modal-backdrop .card h1,
+.modal-backdrop .card h2,
+.modal-backdrop .card h3,
+.modal-backdrop .card h4,
+.modal-backdrop .card h5 {
+  color: #08102a !important;
+}
+.modal-backdrop .card .form-control::placeholder {
+  /* Force a very high-contrast placeholder inside dialogs so automated
+     checks (axe) and users relying on assistive tech won't see low-contrast
+     placeholder text. Using !important because Bootstrap's upstream styles
+     sometimes win in headless environments. */
+  color: #08102a !important; /* near-black */
+  opacity: 1 !important;
+}
+.modal-backdrop .card .btn-outline-secondary {
+  /* Cancel / outline buttons should use near-black text on white for
+     guaranteed contrast */
+  border-color: #6B7280 !important;
+  color: #08102a !important;
+}
+.modal-backdrop .card .btn-primary {
+  /* Ensure the primary action inside modals uses a sufficiently dark
+     background so white text meets 4.5:1 contrast */
+  background-color: #1D4ED8 !important; /* blue-700 */
+  color: #ffffff !important;
+}
+
 /* Animations */
 @keyframes fadeIn {
   from {
@@ -215,10 +332,255 @@ select:disabled {
   }
 }
 
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .animate-fade-in {
   animation: fadeIn 0.3s ease-in;
 }
 
 .animate-slide-in {
   animation: slideIn 0.3s ease-in;
+}
+
+/* Enhanced Card Styling */
+.card {
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+  transform: translateY(-2px);
+}
+
+.card-header {
+  border-radius: 12px 12px 0 0;
+  background-color: #f8f9fa;
+}
+
+/* Table Enhancements */
+.table-hover tbody tr {
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #f8f9fa;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+/* Badge Enhancements */
+.badge {
+  padding: 0.45em 0.65em;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border-radius: 20px;
+  transition: all 0.2s ease;
+}
+
+.badge:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Button Group Enhancements */
+.btn-group .btn {
+  transition: all 0.2s ease;
+}
+
+.btn-group .btn:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Input & Select Enhancements */
+.form-control,
+.form-select {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  border-color: #e0e0e0;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.form-control:hover,
+.form-select:hover {
+  border-color: #b0b0b0;
+}
+
+/* Dropdown visibility enhancement for modals */
+.modal-backdrop .form-select {
+  opacity: 1 !important;
+  background-color: #ffffff !important;
+  z-index: 1051;
+}
+
+.form-select {
+  opacity: 1;
+  background-color: #ffffff;
+}
+
+/* Ensure dropdown options/popup is fully visible */
+select[open],
+select:focus {
+  position: relative;
+  z-index: 1051;
+}
+
+/* Additional contrast for select dropdown in modals */
+.modal-backdrop select,
+.modal-backdrop .form-select {
+  color: #000000 !important;
+  font-weight: 500;
+}
+
+.modal-backdrop select option {
+  background-color: #ffffff;
+  color: #000000;
+  padding: 8px;
+}
+
+select option {
+  background-color: #ffffff;
+  color: #000000;
+  padding: 8px;
+}
+
+/* Boost dropdown visibility on hover */
+.form-select:hover,
+select:hover {
+  opacity: 1 !important;
+  background-color: #f8f9fa !important;
+  border-color: #0d6efd !important;
+}
+
+/* Input Group Icon Styling */
+.input-group-text {
+  border-color: #e0e0e0;
+  background-color: #fff;
+}
+
+/* Background logo (site-wide) — low-contrast, non-interfering */
+/* Uses an uploaded image in `public/`. If you prefer a different filename,
+   replace the file in `public/` or update the URL below. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0; /* top:0; right:0; bottom:0; left:0 */
+  background-image: url('/background.png');
+  background-repeat: no-repeat;
+  /* center the logo to make it a subtle watermark */
+  background-position: center center;
+  /* use relative sizing so it scales across viewports */
+  background-size: 50% auto; /* ~half the viewport width, maintains aspect ratio */
+  /* faint, subtle watermark */
+  opacity: 0.12; /* very faint background */
+  pointer-events: none; /* should not capture mouse events */
+  z-index: -1; /* sit behind the app UI */
+  /* maintain crisp appearance with minimal filter */
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.12)) contrast(1.2) saturate(1.05) brightness(1.02);
+}
+
+/* semi-transparent white backdrop behind the logo for maximum legibility */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.06); /* subtle white overlay */
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Make sure smaller screens don't show an oversized logo — hide if viewport is narrow */
+@media (max-width: 1024px) {
+  body::before {
+    background-size: 72% auto;
+    background-position: center top;
+    opacity: 0.10; /* faint on tablets */
+  }
+}
+
+@media (max-width: 640px) {
+  body::before {
+    background-size: 80% auto; /* larger relative size on small screens */
+    background-position: center center;
+    opacity: 0.09; /* faint on mobile */
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)) contrast(1.15) saturate(1.03) brightness(1.01);
+  }
+}
+
+/* Ensure dropdowns and selects are fully visible inside modals and edit dialogs */
+.modal-backdrop .form-select,
+.modal-backdrop select,
+.modal-backdrop .dropdown-menu {
+  /* opacity: 1 !important; */
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  z-index: 1080 !important;
+  pointer-events: auto !important;
+}
+
+/* Generic dropdown/menu safety: bump z-index so they appear above overlays */
+.dropdown-menu {
+  z-index: 1080 !important;
+  opacity: 1 !important;
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+/* Options and dropdown items should be high-contrast and readable */
+.modal-backdrop select option,
+.modal-backdrop .dropdown-item,
+select option,
+.dropdown-item {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  padding: 6px 12px !important;
+}
+
+/* Force select controls to render opaque in modals as some browsers blend them with backdrops */
+.modal-backdrop .form-control,
+.modal-backdrop .form-select {
+  background-color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+/* Target only assignment modals for extra visibility (more specific) */
+.assignment-modal {
+  opacity: 1 !important;
+  background-color: #ffffff !important;
+}
+
+.assignment-modal .card,
+.assignment-modal .card-header,
+.assignment-modal .card-body {
+  opacity: 1 !important;
+  background-color: #ffffff !important;
+}
+
+.assignment-modal .form-select,
+.assignment-modal select,
+.assignment-modal .dropdown-menu {
+  opacity: 1 !important;
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  z-index: 1090 !important;
+  box-shadow: 0 6px 18px rgba(16,24,40,0.12) !important;
+  border: 1px solid rgba(13,110,253,0.08) !important;
+}
+
+.assignment-modal .dropdown-item,
+.assignment-modal select option {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  opacity: 1 !important;
 }

@@ -1,0 +1,49 @@
+name: CI (upload-enabled)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: example
+          MYSQL_DATABASE: assignment_dev
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd "mysqladmin ping --silent"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DB_CLIENT: mysql2
+      MYSQL_HOST: 127.0.0.1
+      MYSQL_PORT: 3306
+      MYSQL_USER: root
+      MYSQL_PASSWORD: example
+      MYSQL_DATABASE: assignment_dev
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./server
+      - name: Wait for MySQL
+        run: |
+          for i in `seq 1 30`; do
+            mysqladmin ping -h127.0.0.1 -uroot -pexample && break || sleep 2
+          done
+        working-directory: ./server
+      - name: Run tests
+        run: npm test
+        working-directory: ./server

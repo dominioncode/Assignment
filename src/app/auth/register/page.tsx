@@ -11,6 +11,7 @@ export default function RegisterPage() {
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
   const [studentClass, setStudentClass] = useState('')
+  const [role, setRole] = useState<'student'|'lecturer'>('student')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -23,7 +24,7 @@ export default function RegisterPage() {
       const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, name, class: studentClass }),
+        body: JSON.stringify({ email, password, name, class: studentClass, role }),
       })
       const data = await res.json()
       if (!res.ok) {
@@ -35,7 +36,8 @@ export default function RegisterPage() {
       // Auto-login after register
       const loginResult = await login(email, password)
       if (loginResult.ok) {
-        router.push('/')
+        if (role === 'lecturer') router.push('/lecturer/assignments')
+        else router.push('/student/assignments')
       } else {
         setError('Registered but login failed — please login manually.')
       }
@@ -58,19 +60,27 @@ export default function RegisterPage() {
               <form onSubmit={handleRegister}>
                 <div className="mb-3">
                   <label className="form-label">Name</label>
-                  <input className="form-control" value={name} onChange={(e) => setName(e.target.value)} />
+                  <input name="name" placeholder="Full name" className="form-control" value={name} onChange={(e) => setName(e.target.value)} />
                 </div>
                 <div className="mb-3">
                   <label className="form-label">Email</label>
-                  <input className="form-control" value={email} onChange={(e) => setEmail(e.target.value)} />
+                  <input name="email" placeholder="you@example.com" className="form-control" value={email} onChange={(e) => setEmail(e.target.value)} />
                 </div>
                 <div className="mb-3">
                   <label className="form-label">Class (optional)</label>
-                  <input className="form-control" value={studentClass} onChange={(e) => setStudentClass(e.target.value)} />
+                  <input name="class" placeholder="e.g., Year 1" className="form-control" value={studentClass} onChange={(e) => setStudentClass(e.target.value)} />
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">Role</label>
+                  <select name="role" className="form-select" value={role} onChange={(e) => setRole(e.target.value as any)}>
+                    <option value="student">Student</option>
+                    <option value="lecturer">Lecturer</option>
+                  </select>
+                  <div className="form-text small">Select <strong>Lecturer</strong> when creating instructor accounts (demo uses <code>lecturer@example.com</code>).</div>
                 </div>
                 <div className="mb-3">
                   <label className="form-label">Password</label>
-                  <input type="password" className="form-control" value={password} onChange={(e) => setPassword(e.target.value)} />
+                  <input name="password" placeholder="••••••••" type="password" className="form-control" value={password} onChange={(e) => setPassword(e.target.value)} />
                 </div>
 
                 <div className="d-flex gap-2">

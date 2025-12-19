@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { Calendar, Users, FileText } from 'lucide-react'
-import AdminCard from '@/components/admin/AdminCard'
+import AdminCard from './admin/AdminCard'
 import type { Assignment } from '@/lib/types'
 
 interface AssignmentCardProps {
@@ -47,7 +47,16 @@ export const AssignmentCard: React.FC<AssignmentCardProps> = ({
                 <span>Due in {daysLeft} days</span>
               )}
             </div>
-            <button aria-label={`View details for ${assignment.title}`} className="btn btn-link btn-sm">View Details →</button>
+            <button
+              aria-label={`View details for ${assignment.title}`}
+              className="btn btn-link btn-sm"
+              onClick={(e: React.MouseEvent) => {
+                e.stopPropagation()
+                if (onClick) onClick()
+              }}
+            >
+              View Details →
+            </button>
           </div>
         ) : null
       }

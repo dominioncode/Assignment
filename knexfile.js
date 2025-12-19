@@ -1,7 +1,7 @@
 require('dotenv').config()
 // load server/.env too (dev creds are kept in server/.env)
 require('dotenv').config({ path: './server/.env' })
-const client = process.env.DB_CLIENT || process.env.DATABASE_CLIENT || 'sqlite3'
+const client = process.env.DB_CLIENT || process.env.DATABASE_CLIENT || 'mysql2'
 
 const config = {
   development: {},

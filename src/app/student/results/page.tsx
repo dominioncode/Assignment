@@ -52,7 +52,7 @@ export default function StudentResultsPage() {
   // now using getGradeColor from utils which returns Bootstrap classes
 
   return (
-    <div className="container-fluid">
+    <main className="container-fluid" role="main">
       <div className="mb-3">
         <h1 className="h3 mb-1">My Results</h1>
         <p className="text-muted mb-0">View your semester-based results and grades</p>
@@ -148,10 +148,10 @@ export default function StudentResultsPage() {
 
       {/* GPA Info */}
       <div className="card p-3 assignment-card border-0 shadow-sm">
-        <h5 className="mb-2">Semester Performance</h5>
+        <div className="mb-2">Semester Performance</div>
         <p className="text-muted mb-3">You have completed <strong>{sampleResults.length} courses</strong> in {selectedSemester === 'first' ? 'First' : 'Second'} Semester {selectedYear}. Your current average is <strong>{averagePercentage}%</strong> across all courses.</p>
         <button aria-label="Download transcript" className="btn btn-link p-0">Download Transcript →</button>
       </div>
-    </div>
+    </main>
   )
 }

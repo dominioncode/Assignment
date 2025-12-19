@@ -31,7 +31,7 @@ export default function LecturerResultsPage() {
   ]
 
   return (
-    <div className="container-fluid">
+    <main className="container-fluid" role="main">
       <div className="mb-3">
         <h1 className="h3 mb-1">Student Results</h1>
         <p className="text-muted mb-0">Review and publish semester results</p>
@@ -119,6 +119,6 @@ export default function LecturerResultsPage() {
           </div>
         </div>
       </div>
-    </div>
+    </main>
   )
 }

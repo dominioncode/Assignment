@@ -37,7 +37,7 @@ export default function StudentMaterialsPage() {
   }
 
   return (
-    <div className="container-fluid">
+    <main className="container-fluid" role="main">
       <div className="mb-3">
         <h1 className="h3 mb-1">Study Materials</h1>
         <p className="text-muted mb-0">Access course materials and resources</p>
@@ -51,7 +51,7 @@ export default function StudentMaterialsPage() {
                 <div className="d-flex align-items-start gap-3">
                   <div className="mt-1">{getFileIcon(material.type)}</div>
                   <div>
-                    <h5 className="card-title mb-1">{material.title}</h5>
+                    <div className="card-title mb-1">{material.title}</div>
                     <div className="small text-muted mb-2">Course: {material.course}</div>
                     <div className="small text-muted">
                       <span className="me-3">{material.uploadDate}</span>
@@ -66,6 +66,6 @@ export default function StudentMaterialsPage() {
           </div>
         ))}
       </div>
-    </div>
+    </main>
   )
 }

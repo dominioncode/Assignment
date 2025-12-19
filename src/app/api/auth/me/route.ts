@@ -21,10 +21,19 @@ export async function GET(req: Request) {
   try {
     const knexModule = await import('../../../../../server/db')
     const db = knexModule.getDb()
-    const user = await db('students').where({ id: decoded.id }).first()
+    // Fetch from appropriate table based on role
+    let user: any
+    if (decoded.role === 'lecturer') {
+      user = await db('lecturers').where({ id: decoded.id }).first()
+      if (!user) return NextResponse.json({ error: 'User not found' }, { status: 404 })
+      delete user.password_hash
+      return NextResponse.json({ user: { ...user, role: 'lecturer' } })
+    }
+
+    user = await db('students').where({ id: decoded.id }).first()
     if (!user) return NextResponse.json({ error: 'User not found' }, { status: 404 })
     delete user.password_hash
-    return NextResponse.json({ user })
+    return NextResponse.json({ user: { ...user, role: user.role || 'student' } })
   } catch (err) {
     console.error(err)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })

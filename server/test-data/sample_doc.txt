@@ -1,0 +1,1 @@
+This is a sample document used as a placeholder for testing file uploads.

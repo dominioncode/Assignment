@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { BookOpen, Users, FileText, BarChart3, Bell, LogOut, Menu } from 'lucide-react'
 import ReducedMotionToggle from './ReducedMotionToggle'
+import ApiStatusBanner from './ApiStatusBanner'
 import SidebarNav from '@/components/admin/SidebarNav'
 import type { User } from '@/lib/types'
 
@@ -107,6 +108,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ user, onLogout, child
         </header>
 
         <main className="p-4 overflow-auto" style={{ background: '#f8f9fa' }}>
+          <ApiStatusBanner />
           {children}
         </main>
       </div>

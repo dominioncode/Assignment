@@ -47,7 +47,7 @@ export default function LecturerMaterialsPage() {
   }, [])
 
   return (
-    <div className="container-fluid">
+    <main className="container-fluid" role="main">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <div>
           <h1 className="h3 mb-1">Study Materials</h1>
@@ -67,7 +67,7 @@ export default function LecturerMaterialsPage() {
               </div>
             </div>
             <div className="col-md-4">
-              <select value={filterCourse} onChange={(e) => setFilterCourse(e.target.value)} className="form-select">
+              <select aria-label="Filter materials by course" value={filterCourse} onChange={(e) => setFilterCourse(e.target.value)} className="form-select">
                 <option value="all">All Courses</option>
                 <option value="CS101">CS101 - Database Systems</option>
                 <option value="CS102">CS102 - Web Development</option>
@@ -109,15 +109,20 @@ export default function LecturerMaterialsPage() {
       </div>
       <Modal open={showUploadModal} onClose={() => setShowUploadModal(false)} title="Upload Material">
         <div>
-          <input className="form-control mb-2" placeholder="Title" />
-          <select className="form-select mb-2"><option>CS101</option></select>
-          <input type="file" className="form-control" />
+          <label htmlFor="upload-title" className="form-label visually-hidden">Title</label>
+          <input id="upload-title" autoFocus className="form-control mb-2" placeholder="Title" />
+
+          <label htmlFor="upload-course" className="form-label visually-hidden">Course</label>
+          <select id="upload-course" aria-label="Course" className="form-select mb-2"><option>CS101</option></select>
+
+          <label htmlFor="upload-file" className="form-label">Pick file</label>
+          <input id="upload-file" type="file" className="form-control" />
         </div>
         <div className="d-flex justify-content-end gap-2 mt-3">
           <button className="btn btn-outline-secondary" onClick={() => setShowUploadModal(false)}>Cancel</button>
           <button className="btn btn-primary" onClick={() => { setShowUploadModal(false); }}>Upload</button>
         </div>
       </Modal>
-    </div>
+    </main>
   )
 }

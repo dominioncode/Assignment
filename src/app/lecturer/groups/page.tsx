@@ -41,7 +41,7 @@ export default function LecturerGroupsPage() {
   }, [])
 
   return (
-    <div className="container-fluid">
+    <main className="container-fluid" role="main">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <div>
           <h1 className="h3 mb-1">Manage Groups</h1>
@@ -52,8 +52,11 @@ export default function LecturerGroupsPage() {
 
       <Modal open={showCreateModal} onClose={() => setShowCreateModal(false)} title="Create Group">
         <div>
-          <input className="form-control mb-2" placeholder="Group name" />
-          <input className="form-control mb-2" placeholder="Assignment / topic" />
+          <label htmlFor="group-name" className="form-label visually-hidden">Group name</label>
+          <input id="group-name" autoFocus className="form-control mb-2" placeholder="Group name" />
+
+          <label htmlFor="group-assignment" className="form-label visually-hidden">Assignment / topic</label>
+          <input id="group-assignment" className="form-control mb-2" placeholder="Assignment / topic" />
         </div>
         <div className="d-flex justify-content-end gap-2 mt-3">
           <button className="btn btn-outline-secondary" onClick={() => setShowCreateModal(false)}>Cancel</button>
@@ -90,6 +93,6 @@ export default function LecturerGroupsPage() {
           </div>
         ))}
       </div>
-    </div>
+    </main>
   )
 }

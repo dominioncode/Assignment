@@ -1,8 +1,12 @@
 import { test, expect } from '@playwright/test'
-import { injectAxe, checkA11y } from '@axe-core/playwright'
+import { loginAs } from '../helpers/auth'
+import { injectAxe, checkA11y } from '../helpers/axe'
+import { openCreateModal } from '../helpers/ui'
 import fs from 'fs'
 
 test('Lecturer create group modal opens and accessible', async ({ page }) => {
+  // login as lecturer so the create button is visible
+  await loginAs(page)
   await page.goto('/lecturer/groups')
   await page.waitForSelector('h1:has-text("Manage Groups")')
 
@@ -15,6 +19,12 @@ test('Lecturer create group modal opens and accessible', async ({ page }) => {
   // focus should be inside the modal
   await expect(dialog.locator('input[placeholder="Group name"]')).toBeVisible()
 
+  // wait for final styles to settle (avoid transient/animated colours in headless environments)
+  await page.waitForFunction(() => {
+    const el = document.querySelector('button.btn-primary')
+    if (!el) return false
+    return window.getComputedStyle(el).backgroundColor === 'rgb(29, 78, 216)'
+  })
   await injectAxe(page)
   try {
     await checkA11y(page)
@@ -34,12 +44,15 @@ test('Student create/join group modal opens with keyboard shortcut n', async ({ 
   await page.goto('/student/groups')
   await page.waitForSelector('h1:has-text("My Groups")')
 
-  await page.keyboard.press('n')
-
-  const dialog = page.locator('role=dialog')
+  const dialog = await openCreateModal(page)
   await expect(dialog).toBeVisible()
   await expect(dialog.locator('input[placeholder="Group name"]')).toBeVisible()
 
+  await page.waitForFunction(() => {
+    const el = document.querySelector('button.btn-primary')
+    if (!el) return false
+    return window.getComputedStyle(el).backgroundColor === 'rgb(29, 78, 216)'
+  })
   await injectAxe(page)
   try {
     await checkA11y(page)

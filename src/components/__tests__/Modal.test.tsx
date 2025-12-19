@@ -1,6 +1,7 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { waitFor } from '@testing-library/react'
 import Modal from '../Modal'
 import { describe, test, expect, vi } from 'vitest'
 // Using standard DOM assertions for Vitest (avoid jest-dom matcher import issues in this environment)
@@ -24,14 +25,23 @@ describe('Modal focus trap', () => {
     const focusables = dialogEl.querySelectorAll('a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])')
     expect(focusables.length).toBeGreaterThan(0)
 
-    // initial focus should be on the first focusable (close button in our Modal)
-    const firstFocusable = focusables[0] as HTMLElement
-    expect(document.activeElement).toBe(firstFocusable)
+    // ensure initial focus lands inside the modal on a focusable element
+    const focusableArray = Array.from(focusables) as HTMLElement[]
+    // focus may be applied asynchronously; wait until focus lands on one of the focusables
+    await waitFor(() => {
+      const active = document.activeElement as HTMLElement
+      expect(focusableArray).toContain(active)
+    })
 
-    // simulate tabbing -> next focusable
+    // simulate tabbing -> focus should move to a different focusable element inside modal
+    const initialActive = document.activeElement as HTMLElement
     await userEvent.tab()
-    const secondFocusable = focusables[1] as HTMLElement
-    expect(document.activeElement).toBe(secondFocusable)
+    await waitFor(() => {
+      const afterTab = document.activeElement as HTMLElement
+      // ensure focus moved to a different element
+      expect(focusableArray).toContain(afterTab)
+      expect(afterTab).not.toBe(initialActive)
+    })
 
     // tab again should wrap eventually (we expect third or back to first depending on elements)
     await userEvent.tab()

@@ -1,22 +1,25 @@
 import { test, expect } from '@playwright/test'
-import { injectAxe, checkA11y } from '@axe-core/playwright'
+import { injectAxe, checkA11y } from '../helpers/axe'
+import { openCreateModal } from '../helpers/ui'
 import fs from 'fs'
 
 test.describe('Modal accessibility and focus trap', () => {
   test('student assignments create modal opens and focuses and traps tab', async ({ page }) => {
-    await page.goto('/student/assignments')
+    // run this modal accessibility scenario as a lecturer (assignment creation exists for lecturers)
+    await (await import('../helpers/auth')).loginAs(page)
+    await page.goto('/lecturer/assignments')
 
     // wait for the page to be ready
     await page.waitForSelector('h1:has-text("My Assignments")')
 
-    // press 'n' to open modal
-    await page.keyboard.press('n')
+    // open modal (keyboard shortcut with click fallback)
+    const dialog = await openCreateModal(page)
 
-    const dialog = page.locator('role=dialog')
     await expect(dialog).toBeVisible()
 
-    // ensure the first input is focused
-    const firstInput = dialog.locator('input, textarea, [tabindex]')
+    // ensure the first input is focused — small delay to let focus settle
+    await page.waitForTimeout(100)
+    const firstInput = dialog.locator('input, textarea, [tabindex]').first()
     await expect(firstInput).toBeFocused()
 
     // Tab through the dialog and ensure focus wraps
@@ -27,6 +30,14 @@ test.describe('Modal accessibility and focus trap', () => {
     await page.keyboard.press('Tab')
     await page.keyboard.up('Shift')
 
+    // Accessibility check using axe — ensure visual styles have settled first
+    // (avoid transient contrast values in headless/CI rendering where animations or
+    // late-applied styles can make colour readings unstable)
+    await page.waitForFunction(() => {
+      const el = document.querySelector('button.btn-primary')
+      if (!el) return false
+      return window.getComputedStyle(el).backgroundColor === 'rgb(29, 78, 216)'
+    })
     // Accessibility check using axe — capture report on failure
     await injectAxe(page)
     try {

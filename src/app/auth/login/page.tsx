@@ -170,8 +170,8 @@ export default function LoginPage() {
           <div className="card bg-light border mb-3 p-3">
             <p className="small fw-semibold mb-2">Try demo login:</p>
             <ul className="small mb-0">
-              <li>Email: <code className="bg-white px-2 py-1 rounded">demo@example.com</code></li>
-              <li>Password: <code className="bg-white px-2 py-1 rounded">demo123</code></li>
+              <li><strong>Student</strong> — Email: <code className="bg-white px-2 py-1 rounded">demo@example.com</code>, Password: <code className="bg-white px-2 py-1 rounded">demo123</code></li>
+              <li><strong>Lecturer</strong> — Email: <code className="bg-white px-2 py-1 rounded">lecturer@example.com</code>, Password: <code className="bg-white px-2 py-1 rounded">demo123</code></li>
             </ul>
           </div>
 

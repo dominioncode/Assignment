@@ -4,7 +4,7 @@ const path = require('path')
 require('dotenv').config({ path: path.join(__dirname, '..', 'server', '.env') })
 
 async function main() {
-  const client = process.env.DB_CLIENT || process.env.DATABASE_CLIENT || 'sqlite3'
+  const client = process.env.DB_CLIENT || process.env.DATABASE_CLIENT || 'mysql2'
   if (client === 'mysql2' || client === 'mysql') {
     const host = process.env.MYSQL_HOST || 'localhost'
     const port = parseInt(process.env.MYSQL_PORT || '3306', 10)

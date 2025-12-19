@@ -5,7 +5,17 @@ import React, { useEffect, useState } from 'react'
 const STORAGE_KEY = 'reducedMotionPreference'
 
 export default function ReducedMotionToggle() {
-  const [reduced, setReduced] = useState<boolean | null>(null)
+  // start with a deterministic boolean so tests can interact immediately
+  const [reduced, setReduced] = useState<boolean>(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY)
+      if (stored !== null) return stored === 'true'
+    } catch (e) {
+      // ignore
+    }
+    // default to false until we learn system preference in effect
+    return false
+  })
 
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY)
@@ -24,7 +34,6 @@ export default function ReducedMotionToggle() {
   }, [])
 
   const toggle = () => {
-    if (reduced === null) return
     const next = !reduced
     setReduced(next)
     localStorage.setItem(STORAGE_KEY, next.toString())

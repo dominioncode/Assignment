@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # StudyHub - Assignment & Study Management System
 
 A comprehensive platform for students and lecturers to manage assignments, coordinate group work, track academic results, and share study materials efficiently.
@@ -72,6 +71,23 @@ public/                          # Static assets
 
 5. **Open your browser**
    Navigate to `http://localhost:3000`
+
+### Start the backend server
+
+If you need to run only the backend server it lives in the `server/` folder. From the project root you can now run:
+
+```powershell
+npm run server      # start production server from project root
+npm run server:dev  # run dev server (nodemon) from project root (delegates to server/)
+```
+
+Or from the `server/` folder directly:
+
+```powershell
+cd server
+npm run server      # starts node index.js
+npm run dev         # dev mode with nodemon
+```
 
 ## 📖 Usage Guide
 
@@ -157,6 +173,53 @@ colors: {
 
 ### API Integration Points (Future)
 
+### AI: Raptor mini (Preview) — enable for all clients
+
+This project includes an optional server-side route to forward model requests to a hosted Raptor mini (Preview) model. The forwarding route is intentionally gated behind an environment feature flag so you can enable it per-deployment.
+
+How to enable:
+
+1. Open `server/.env` (or use your deployment environment variables) and set the following values:
+
+```env
+# Enable or disable the preview
+RAPTOR_MINI_ENABLED=true
+# URL of your Raptor mini/preview model endpoint (e.g. https://api.example.com/raptor-mini/v1)
+RAPTOR_MINI_URL=https://example.com/raptor-mini
+# API key / token for the Raptor provider
+RAPTOR_MINI_API_KEY=sk-your-secret-token
+```
+
+2. When `RAPTOR_MINI_ENABLED` is true the server will expose an authenticated proxy endpoint at:
+
+```
+POST /api/ai
+
+Headers: Authorization: Bearer <JWT>
+Body: JSON payload matching your Raptor provider (server forwards the JSON body as-is)
+```
+
+3. Use the client (authenticated) to POST to `/api/ai` — the server will forward the payload to `RAPTOR_MINI_URL` and return the provider's response.
+
+Security note: Protect your RAPTOR_MINI_API_KEY and only enable this in trusted environments. The proxy is authenticated using the same JWT-based auth used by the app.
+
+Running integration tests against a real Raptor endpoint
+
+If you want CI or a developer machine to verify the actual upstream forwarding behavior you can provide a test endpoint and API key. The server contains an optional guarded integration test which will only run when these environment variables are present:
+
+```bash
+# In the server/ folder set these (CI/runner must set these securely)
+RAPTOR_MINI_TEST_URL=https://your-raptor-endpoint.example/preview
+RAPTOR_MINI_TEST_API_KEY=sk-your-test-key
+
+# Then from the project root run (server tests are mocha-based in server/)
+cd server
+npm ci
+npm test
+```
+
+The integration test is skipped when `RAPTOR_MINI_TEST_URL` is not set so it is safe to keep in CI pipelines — only runners with the needed secrets will exercise the live upstream.
+
 ## 📝 Contributing
 
 1. Create a feature branch (`git checkout -b feature/AmazingFeature`)
@@ -208,6 +271,35 @@ Convenience helpers (shorthand):
 npm run db:setup    # create -> migrate -> seed
 npm run db:reset    # drop -> create -> migrate -> seed (clean start)
 ```
+
+Local MySQL (recommended dev quick start)
+----------------------------------------
+
+If you don't have a local MySQL setup, use the included Docker Compose to run a local MySQL instance for development.
+
+From the `server/` directory:
+
+```powershell
+# starts a MySQL 8 container with a database named assignment_dev (root/example credentials)
+docker compose up -d
+
+# inspect health (optional)
+docker compose ps
+
+# then from project root run migrations + start server
+cd server
+npm ci
+$env:DB_CLIENT='mysql2'
+$env:MYSQL_HOST='127.0.0.1'
+$env:MYSQL_PORT='3306'
+$env:MYSQL_USER='root'
+$env:MYSQL_PASSWORD='example'
+$env:MYSQL_DATABASE='assignment_dev'
+npm run db:migrate
+node index.js
+```
+
+Note: Change credentials for production and add secrets in environment variables or your deployment platform.
 ```
 
 - Use `DB_CLIENT=mysql2` if you want to use XAMPP / a MySQL instance.

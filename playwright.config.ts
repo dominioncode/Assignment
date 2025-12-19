@@ -7,6 +7,8 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   reporter: process.env.CI ? 'github' : 'list',
   use: {
+    // Base URL used when tests call page.goto('/path') — allow override with PLAYWRIGHT_BASE_URL
+    baseURL: process.env.PLAYWRIGHT_BASE_URL || 'http://127.0.0.1:3000',
     headless: true,
     viewport: { width: 1280, height: 720 },
     actionTimeout: 0,
